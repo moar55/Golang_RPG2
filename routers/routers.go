@@ -24,7 +24,7 @@ var checkForAuthorization = func(ctx *context.Context) {
 	_, ok := ctx.Input.Session("id").(int)
 	if !ok {
 		ctx.ResponseWriter.WriteHeader(401)
-		ctx.WriteString("Unauothorized!")
+		ctx.WriteString("Unauthorized!")
 	}
 }
 

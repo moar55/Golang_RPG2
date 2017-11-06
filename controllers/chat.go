@@ -21,6 +21,8 @@ func (c *ChatController) Post() {
 
 		message := strings.Split(c.GetString("message"), " ")
 
+		fmt.Println(message)
+
 		if c.GetSession("id") == nil {
 			switch message[0] {
 			case "login":
