@@ -18,6 +18,7 @@ type Message struct {
 
 func (c *ChatController) Post() {
 	if c.Ctx.Request.Header.Get("Authorization") != "" {
+		fmt.Println("the message", c.GetString("message"))
 
 		message := strings.Split(c.GetString("message"), " ")
 
