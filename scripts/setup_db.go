@@ -2,6 +2,7 @@ package script
 
 import (
 	"Golang_RPG/models"
+	"os"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
@@ -9,7 +10,14 @@ import (
 
 func init() {
 	orm.RegisterDriver("mysql", orm.DRMySQL)
-	orm.RegisterDataBase("default", "mysql", beego.AppConfig.String("connectionString"))
+	var connectionString string
+	if os.Getenv("GO_ENV") == "production" {
+		connectionString = beego.AppConfig.String("connectionStringProd")
+	} else {
+		connectionString = beego.AppConfig.String("connectionString")
+	}
+
+	orm.RegisterDataBase("default", "mysql", connectionString)
 	orm.RegisterModel(new(models.Users))
 	orm.RegisterModel(new(models.Bots))
 	orm.RegisterModel(new(models.Inventory))
