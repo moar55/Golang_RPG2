@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"strings"
@@ -18,9 +19,11 @@ type Message struct {
 
 func (c *ChatController) Post() {
 	if c.Ctx.Request.Header.Get("Authorization") != "" {
-		fmt.Println("the message", c.GetString("message"))
+		decoder := json.NewDecoder(c.Ctx.Request.Body)
+		var reqMessage Message
+		decoder.Decode(&reqMessage)
 
-		message := strings.Split(c.GetString("message"), " ")
+		message := strings.Split(reqMessage.Message, " ")
 
 		fmt.Println(message)
 
