@@ -6,48 +6,6 @@
 	"ignore": "test",
 	"package": [
 		{
-			"checksumSHA1": "k2elyvMMXCHQyChe7C2ybw1r3cg=",
-			"path": "Golang_RPG/controllers",
-			"revision": "abf2dfaae32431bcfc9f1a05b006ae87b72e2cb0",
-			"revisionTime": "2017-11-06T17:24:38Z"
-		},
-		{
-			"checksumSHA1": "rIvxzwZMdbZjHDfDPEylHiSWx8Y=",
-			"path": "Golang_RPG/controllers/battle",
-			"revision": "abf2dfaae32431bcfc9f1a05b006ae87b72e2cb0",
-			"revisionTime": "2017-11-06T17:24:38Z"
-		},
-		{
-			"checksumSHA1": "sSecZuMqk70AzjANGhlDzpEpaMc=",
-			"path": "Golang_RPG/controllers/scan",
-			"revision": "abf2dfaae32431bcfc9f1a05b006ae87b72e2cb0",
-			"revisionTime": "2017-11-06T17:24:38Z"
-		},
-		{
-			"checksumSHA1": "d9SNJSYYdYKKnaWToxOycpi6ifg=",
-			"path": "Golang_RPG/errors",
-			"revision": "abf2dfaae32431bcfc9f1a05b006ae87b72e2cb0",
-			"revisionTime": "2017-11-06T17:24:38Z"
-		},
-		{
-			"checksumSHA1": "2tt+VsjNIVOX9iqbhXnb+oghP9g=",
-			"path": "Golang_RPG/models",
-			"revision": "abf2dfaae32431bcfc9f1a05b006ae87b72e2cb0",
-			"revisionTime": "2017-11-06T17:24:38Z"
-		},
-		{
-			"checksumSHA1": "rCw5ZU8hkGIL2PgkUu3tA5XuTh4=",
-			"path": "Golang_RPG/routers",
-			"revision": "abf2dfaae32431bcfc9f1a05b006ae87b72e2cb0",
-			"revisionTime": "2017-11-06T17:24:38Z"
-		},
-		{
-			"checksumSHA1": "9lbo3e7NkvWMX3txODK+5wvAnyM=",
-			"path": "Golang_RPG/scripts",
-			"revision": "abf2dfaae32431bcfc9f1a05b006ae87b72e2cb0",
-			"revisionTime": "2017-11-06T17:24:38Z"
-		},
-		{
 			"checksumSHA1": "P/YiamlyGvQBE5kb9fgp3a+CckI=",
 			"path": "github.com/astaxie/beego",
 			"revision": "c5118e9535f237996bae7c7baebe4ed4247cb2c6",
@@ -156,5 +114,5 @@
 			"revisionTime": "2017-10-20T01:06:42Z"
 		}
 	],
-	"rootPath": "herokugolang/Golang_RPG"
+	"rootPath": "Golang_RPG"
 }
