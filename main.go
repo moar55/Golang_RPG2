@@ -4,6 +4,8 @@ import (
 	_ "Golang_RPG/routers"
 	_ "Golang_RPG/scripts"
 
+	_ "github.com/astaxie/beego/session/mysql"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
 )
