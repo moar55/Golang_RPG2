@@ -13,8 +13,8 @@ func main() {
 	beego.InsertFilter("*", beego.BeforeRouter, func(ctx *context.Context) {
 		if ctx.Input.Method() == "OPTIONS" {
 			ctx.Output.Header("Access-Control-Allow-Origin", "*")
-			ctx.Output.Header("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTIONS")
-			ctx.Output.Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+			ctx.Output.Header("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT")
+			ctx.Output.Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization")
 			ctx.Abort(200, "Hello")
 		}
 	})
