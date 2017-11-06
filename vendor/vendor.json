@@ -60,6 +60,12 @@
 			"revisionTime": "2017-10-14T08:28:56Z"
 		},
 		{
+			"checksumSHA1": "xUBQhqfNte15uIe7/l4jHNH24WA=",
+			"path": "github.com/astaxie/beego/session/mysql",
+			"revision": "c5118e9535f237996bae7c7baebe4ed4247cb2c6",
+			"revisionTime": "2017-10-14T08:28:56Z"
+		},
+		{
 			"checksumSHA1": "EOoY9qbCsWnu5FlZZnMKUKkLcMk=",
 			"path": "github.com/astaxie/beego/toolbox",
 			"revision": "c5118e9535f237996bae7c7baebe4ed4247cb2c6",
