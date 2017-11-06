@@ -6,6 +6,48 @@
 	"ignore": "test",
 	"package": [
 		{
+			"checksumSHA1": "k2elyvMMXCHQyChe7C2ybw1r3cg=",
+			"path": "Golang_RPG/controllers",
+			"revision": "abf2dfaae32431bcfc9f1a05b006ae87b72e2cb0",
+			"revisionTime": "2017-11-06T17:24:38Z"
+		},
+		{
+			"checksumSHA1": "rIvxzwZMdbZjHDfDPEylHiSWx8Y=",
+			"path": "Golang_RPG/controllers/battle",
+			"revision": "abf2dfaae32431bcfc9f1a05b006ae87b72e2cb0",
+			"revisionTime": "2017-11-06T17:24:38Z"
+		},
+		{
+			"checksumSHA1": "sSecZuMqk70AzjANGhlDzpEpaMc=",
+			"path": "Golang_RPG/controllers/scan",
+			"revision": "abf2dfaae32431bcfc9f1a05b006ae87b72e2cb0",
+			"revisionTime": "2017-11-06T17:24:38Z"
+		},
+		{
+			"checksumSHA1": "d9SNJSYYdYKKnaWToxOycpi6ifg=",
+			"path": "Golang_RPG/errors",
+			"revision": "abf2dfaae32431bcfc9f1a05b006ae87b72e2cb0",
+			"revisionTime": "2017-11-06T17:24:38Z"
+		},
+		{
+			"checksumSHA1": "2tt+VsjNIVOX9iqbhXnb+oghP9g=",
+			"path": "Golang_RPG/models",
+			"revision": "abf2dfaae32431bcfc9f1a05b006ae87b72e2cb0",
+			"revisionTime": "2017-11-06T17:24:38Z"
+		},
+		{
+			"checksumSHA1": "rCw5ZU8hkGIL2PgkUu3tA5XuTh4=",
+			"path": "Golang_RPG/routers",
+			"revision": "abf2dfaae32431bcfc9f1a05b006ae87b72e2cb0",
+			"revisionTime": "2017-11-06T17:24:38Z"
+		},
+		{
+			"checksumSHA1": "9lbo3e7NkvWMX3txODK+5wvAnyM=",
+			"path": "Golang_RPG/scripts",
+			"revision": "abf2dfaae32431bcfc9f1a05b006ae87b72e2cb0",
+			"revisionTime": "2017-11-06T17:24:38Z"
+		},
+		{
 			"checksumSHA1": "P/YiamlyGvQBE5kb9fgp3a+CckI=",
 			"path": "github.com/astaxie/beego",
 			"revision": "c5118e9535f237996bae7c7baebe4ed4247cb2c6",
@@ -88,12 +130,6 @@
 			"path": "github.com/ramin0/chatbot",
 			"revision": "c9bb79785b0225cdb629db50037d11361d8c0bed",
 			"revisionTime": "2017-09-22T23:21:59Z"
-		},
-		{
-			"checksumSHA1": "zmC8/3V4ls53DJlNTKDZwPSC/dA=",
-			"path": "github.com/satori/go.uuid",
-			"revision": "5bf94b69c6b68ee1b541973bb8e1144db23a194b",
-			"revisionTime": "2017-03-21T23:07:31Z"
 		},
 		{
 			"checksumSHA1": "GtamqiJoL7PGHsN454AoffBFMa8=",
