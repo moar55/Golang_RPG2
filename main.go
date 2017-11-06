@@ -18,10 +18,5 @@ func main() {
 			ctx.Abort(200, "Hello")
 		}
 	})
-
-	if beego.RunMode == "dev" {
-		beego.DirectoryIndex = true
-		beego.StaticDir["/swagger"] = "swagger"
-	}
 	beego.Run()
 }
