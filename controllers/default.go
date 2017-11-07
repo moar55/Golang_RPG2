@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/astaxie/beego/logs"
+	"github.com/icza/session"
 	uuid "github.com/satori/go.uuid"
 
 	"github.com/astaxie/beego"
@@ -31,7 +32,8 @@ type Welcome2 struct {
 
 //Get gets
 func (c *MainController) Get() {
-	if c.GetSession("userId") == nil {
+	sess := session.Get(c.Ctx.Request)
+	if sess.CAttr("userId") == nil {
 		options := []string{"Yes", "No"}
 		fmt.Println(options)
 		u1 := uuid.NewV4()
@@ -48,8 +50,8 @@ func (c *MainController) Get() {
 	} else {
 		options := []string{"Continue"}
 		l := logs.GetLogger()
-		l.Println(c.GetSession("userId"))
-		y := fmt.Sprintf("Welcome, %d", c.GetSession("userId").(int))
+		l.Println(sess.CAttr("userId"))
+		y := fmt.Sprintf("Welcome, %d", sess.Attr("userId").(int))
 		x := Welcome{true, y, options}
 		c.Data["json"] = &x
 	}

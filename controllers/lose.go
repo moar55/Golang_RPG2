@@ -1,5 +1,7 @@
 package controllers
 
+import "github.com/icza/session"
+
 type lose struct {
 	Message string
 }
@@ -11,8 +13,9 @@ func Lose(c *ChatController) {
 }
 
 func DLose(c *ChatController) {
+	sess := session.Get(c.Ctx.Request)
 	c.Data["json"] = &Message{Message: "You lose..."}
-	c.SetSession("inBattle", false)
+	sess.SetAttr("inBattle", false)
 	c.ServeJSON()
 
 }

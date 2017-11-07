@@ -7,6 +7,7 @@ import (
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
+	"github.com/icza/session"
 )
 
 type BuyItemController struct {
@@ -14,8 +15,9 @@ type BuyItemController struct {
 }
 
 func ChatBuy(c *ChatController, name string) {
-	if c.GetSession("nearShop") == nil {
-		fmt.Print(c.GetSession("nearShop"))
+	sess := session.Get(c.Ctx.Request)
+	if sess.CAttr("nearShop") == nil {
+		fmt.Print(sess.CAttr("nearShop"))
 		c.Data["json"] = &Message{Message: "search again for shop"}
 		c.Ctx.ResponseWriter.WriteHeader(403)
 		c.ServeJSON()
@@ -29,7 +31,7 @@ func ChatBuy(c *ChatController, name string) {
 		c.Data["json"] = &Response{Message: "No item with such name"}
 	} else {
 		var shopItems []*models.ShopItems
-		o.QueryTable("shop_items").Filter("LocationID", c.GetSession("nearShop")).RelatedSel().All(&shopItems)
+		o.QueryTable("shop_items").Filter("LocationID", sess.CAttr("nearShop")).RelatedSel().All(&shopItems)
 		// could have used a join here, too late tho :/
 		var shopItem *models.ShopItems
 		for _, x := range shopItems {
@@ -43,7 +45,7 @@ func ChatBuy(c *ChatController, name string) {
 			c.Data["json"] = &errors.ItemNotFound.Message
 			c.Ctx.ResponseWriter.WriteHeader(errors.ItemNotFound.HTTPStatus)
 		} else {
-			bot := c.GetSession("bot").(models.Bots)
+			bot := sess.CAttr("bot").(models.Bots)
 			if bot.Fakka <= shopItem.Price {
 				c.Data["json"] = &errors.NoEnoughFakka.Message
 				c.Ctx.ResponseWriter.WriteHeader(errors.NoEnoughFakka.HTTPStatus)
@@ -56,7 +58,7 @@ func ChatBuy(c *ChatController, name string) {
 					c.Ctx.ResponseWriter.WriteHeader(500)
 				} else {
 					c.Data["json"] = &Response{Message: "Done!"}
-					c.SetSession("nearShop", nil)
+					sess.SetAttr("nearShop", nil)
 				}
 			}
 		}

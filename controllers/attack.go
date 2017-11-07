@@ -7,6 +7,7 @@ import (
 
 	"github.com/astaxie/beego"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/icza/session"
 	// "github.com/astaxie/beego/logs"
 )
 
@@ -15,10 +16,11 @@ type BattleAttackController struct {
 }
 
 func attack(c *ChatController) {
-	player := c.GetSession("bot").(models.Bots)
-	enemy := c.GetSession("enemy").(models.Enemies)
+	sess := session.Get(c.Ctx.Request)
+	player := sess.Attr("bot").(models.Bots)
+	enemy := sess.Attr("enemy").(models.Enemies)
 
-	enemyCurrentHealth, _ := c.GetSession("enemyCurrentHealth").(int)
+	enemyCurrentHealth, _ := sess.Attr("enemyCurrentHealth").(int)
 
 	rand.Seed(time.Now().UTC().UnixNano())
 	random := rand.Intn(500)
@@ -33,7 +35,7 @@ func attack(c *ChatController) {
 	if enemyCurrentHealth <= 0 {
 		Win(c)
 	} else {
-		c.SetSession("enemyCurrentHealth", enemyCurrentHealth)
+		sess.SetAttr("enemyCurrentHealth", enemyCurrentHealth)
 		EnemyTurn(c, enemy, player)
 	}
 }

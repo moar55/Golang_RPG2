@@ -10,6 +10,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/icza/session"
 	// "github.com/astaxie/beego/logs"
 )
 
@@ -46,8 +47,9 @@ func getBot(c *ChatController, id int, name string, o orm.Ormer) {
 		c.Data["json"] = &SuccessWOBot{Message: "Welcome " + name + " !", BotError: _err}
 		c.Ctx.ResponseWriter.WriteHeader(401)
 	} else {
-		c.SetSession("inBattle", false)
-		c.SetSession("bot", bot)
+		sess := session.Get(c.Ctx.Request)
+		sess.SetAttr("inBattle", false)
+		sess.SetAttr("bot", bot)
 		c.Data["json"] = &SuccessWBot{Message: "Welcome " + name + " !", Bot: &bot}
 	}
 }
@@ -64,8 +66,11 @@ func ChatLogin(username string, password string, c *ChatController) {
 		c.Ctx.ResponseWriter.WriteHeader(401)
 
 	} else {
-		c.SetSession("id", user.Id)
+		sess := session.NewSession()
+		// /c.SetSession("id", user.Id)
+		sess.SetAttr("id", user.Id)
 		getBot(c, user.Id, user.Name, o)
+		session.Add(sess, c.Ctx.ResponseWriter)
 	}
 	c.ServeJSON()
 }

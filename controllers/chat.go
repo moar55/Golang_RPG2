@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/astaxie/beego"
+	"github.com/icza/session"
 )
 
 type ChatController struct {
@@ -25,9 +26,11 @@ func (c *ChatController) Post() {
 
 		message := strings.Split(reqMessage.Message, " ")
 
+		sess := session.Get(c.Ctx.Request)
+
 		fmt.Println(message)
 
-		if c.GetSession("id") == nil {
+		if sess == nil {
 			switch message[0] {
 			case "login":
 				ChatLogin(message[1], message[2], c)

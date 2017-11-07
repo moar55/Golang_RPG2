@@ -6,6 +6,7 @@ import (
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
+	"github.com/icza/session"
 )
 
 type BotController struct {
@@ -18,7 +19,8 @@ type Ayhabal struct {
 func ChatBot(name string, race string, c *ChatController) {
 
 	o := orm.NewOrm()
-	_id := c.GetSession("id")
+	sess := session.Get(c.Ctx.Request)
+	_id := sess.CAttr("id")
 	if _id != nil {
 		id := _id.(int)
 		_bot := models.Bots{User_id: id}

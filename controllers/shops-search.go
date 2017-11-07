@@ -9,6 +9,7 @@ import (
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
+	"github.com/icza/session"
 	"googlemaps.github.io/maps"
 )
 
@@ -57,7 +58,8 @@ func ChatSearch(latitude float64, longitude float64, c *ChatController) {
 					c.Data["json"] = &Response{Message: message}
 				} else if distance <= 5 {
 					c.Data["json"] = &Response{Message: "A nearby shop is just beside you. Type access to access it!"}
-					c.SetSession("nearShop", location.Id)
+					sess := session.Get(c.Ctx.Request)
+					sess.SetAttr("nearShop", location.Id)
 				} else {
 					c.Data["json"] = &Response{Message: "No nearby shops!"}
 
