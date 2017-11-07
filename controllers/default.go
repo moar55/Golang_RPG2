@@ -33,7 +33,7 @@ type Welcome2 struct {
 //Get gets
 func (c *MainController) Get() {
 	sess := session.Get(c.Ctx.Request)
-	if sess.CAttr("userId") == nil {
+	if sess == nil {
 		options := []string{"Yes", "No"}
 		fmt.Println(options)
 		u1 := uuid.NewV4()
