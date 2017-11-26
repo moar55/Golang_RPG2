@@ -11,6 +11,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/gorilla/sessions"
 	// "github.com/astaxie/beego/logs"
 )
 
@@ -68,6 +69,11 @@ func ChatLogin(username string, password string, c *ChatController) {
 
 	} else {
 		session, err := store.Get(c.Ctx.Request, "session")
+		session.Options = &sessions.Options{
+			Path:     "/",
+			MaxAge:   86400 * 7,
+			HttpOnly: true,
+		}
 		if err != nil {
 			c.Data["json"] = &Message{Message: err.Error()}
 			c.Ctx.ResponseWriter.WriteHeader(500)
