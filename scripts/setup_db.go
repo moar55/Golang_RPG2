@@ -26,7 +26,10 @@ func init() {
 		connectionString = beego.AppConfig.String("connectionString")
 	}
 
-	fmt.Println("the connection string", connectionString)
+	maxIdle := 30
+	maxConn := 30
+
+	fmt.Println("the connection string", connectionString, maxIdle, maxConn)
 	fmt.Println(connectionString)
 
 	orm.RegisterDataBase("default", "mysql", connectionString)

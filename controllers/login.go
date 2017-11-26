@@ -48,7 +48,7 @@ func getBot(c *ChatController, id int, name string, o orm.Ormer) {
 		c.Data["json"] = &SuccessWOBot{Message: "Welcome " + name + " !", BotError: _err}
 		c.Ctx.ResponseWriter.WriteHeader(401)
 	} else {
-		session, _ := store.Get(c.Ctx.Output.Context.Request, "session")
+		session, _ := store.Get(c.Ctx.Request, "session")
 		session.Values["inBattle"] = false
 		session.Values["bot"] = bot
 		c.Data["json"] = &SuccessWBot{Message: "Welcome " + name + " !", Bot: &bot}
@@ -68,7 +68,7 @@ func ChatLogin(username string, password string, c *ChatController) {
 		c.Ctx.ResponseWriter.WriteHeader(401)
 
 	} else {
-		session, err := store.Get(c.Ctx.Output.Context.Request, "session")
+		session, err := store.Get(c.Ctx.Request, "session")
 		session.Options = &sessions.Options{
 			Path:     "/",
 			MaxAge:   86400 * 7,
@@ -81,7 +81,7 @@ func ChatLogin(username string, password string, c *ChatController) {
 		fmt.Println("setting da cookie boy")
 		session.Values["id"] = user.Id
 		getBot(c, user.Id, user.Name, o)
-		session.Save(c.Ctx.Output.Context.Request, c.Ctx.Output.Context.ResponseWriter)
+		session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 	}
 	c.ServeJSON()
 }
