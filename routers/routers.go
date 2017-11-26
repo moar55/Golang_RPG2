@@ -2,7 +2,6 @@ package routers
 
 import (
 	"Golang_RPG/controllers"
-	"fmt"
 	"strings"
 
 	"github.com/astaxie/beego"
@@ -20,12 +19,12 @@ var checkForAuthorization = func(ctx *context.Context) {
 		return
 	}
 
-	fmt.Println("eyo in here")
-	_, ok := ctx.Input.Session("id").(int)
-	if !ok {
-		ctx.ResponseWriter.WriteHeader(401)
-		ctx.WriteString("Unauthorized!")
-	}
+	// fmt.Println("eyo in here")
+	// _, ok := ctx.Input.Session("id").(int)
+	// if !ok {
+	// 	ctx.ResponseWriter.WriteHeader(401)
+	// 	ctx.WriteString("Unauthorized!")
+	// }
 }
 
 func init() {
@@ -38,6 +37,6 @@ func init() {
 	beego.Router("shops/nearestshop", &controllers.NearestShopItemsController{}) // uses result from nearest shop search to display items
 	beego.Router("scan", &controllers.ScanController{})
 	beego.Router("buyitem", &controllers.BuyItemController{})
-
+	beego.Router("/test", &controllers.TestController{})
 	beego.Router("chat", &controllers.ChatController{})
 }
