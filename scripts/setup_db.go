@@ -2,17 +2,26 @@ package script
 
 import (
 	"Golang_RPG/models"
+	"fmt"
+	"net/url"
 	"os"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 )
 
+func convert_datasource(ds string) (result string) {
+	url, _ := url.Parse(ds)
+	result = fmt.Sprintf("%s@tcp(%s:3306)%s", url.User.String(), url.Host, url.Path)
+	beego.Info(result)
+	return
+}
+
 func init() {
 	orm.RegisterDriver("mysql", orm.DRMySQL)
 	var connectionString string
 	if os.Getenv("GO_ENV") == "production" {
-		connectionString = os.Getenv("DATABASE_URL")
+		connectionString = convert_datasource(os.Getenv("DATABASE_URL"))
 	} else {
 		connectionString = beego.AppConfig.String("connectionString")
 	}
