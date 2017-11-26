@@ -1,6 +1,6 @@
 <html>
 <head>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 </head>
 <body>
@@ -13,7 +13,7 @@ $("#submit").on('click',() => {
   console.log('hello');
   $.ajax({
       url: 'chat',
-      type: 'get',
+      type: 'post',
       data: JSON.stringify({
           message: $("#message").val()
       }),
