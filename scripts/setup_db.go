@@ -12,7 +12,7 @@ func init() {
 	orm.RegisterDriver("mysql", orm.DRMySQL)
 	var connectionString string
 	if os.Getenv("GO_ENV") == "production" {
-		connectionString = beego.AppConfig.String("connectionStringProd")
+		connectionString = os.Getenv("DATABASE_URL")
 	} else {
 		connectionString = beego.AppConfig.String("connectionString")
 	}
