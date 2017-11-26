@@ -49,6 +49,7 @@ func getBot(c *ChatController, id int, name string, o orm.Ormer) {
 		c.Ctx.ResponseWriter.WriteHeader(401)
 	} else {
 		session, _ := store.Get(c.Ctx.Request, "session")
+		fmt.Println("the session is", session)
 		session.Values["inBattle"] = false
 		session.Values["bot"] = bot
 		c.Data["json"] = &SuccessWBot{Message: "Welcome " + name + " !", Bot: &bot}
