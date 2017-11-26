@@ -21,6 +21,8 @@ type ScanController struct {
 func ChatScan(c *ChatController) {
 	o := orm.NewOrm()
 	session, _ := store.Get(c.Ctx.Request, "session")
+	fmt.Println("the session is", session)
+
 	if session.Values["id"] != nil && session.Values["bot"] != nil {
 		if session.Values["inBattle"] == false {
 			rand.Seed(time.Now().UTC().UnixNano())
