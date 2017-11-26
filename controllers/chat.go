@@ -7,8 +7,10 @@ import (
 	"strings"
 
 	"github.com/astaxie/beego"
-	"github.com/icza/session"
+	"github.com/gorilla/sessions"
 )
+
+var store = sessions.NewCookieStore([]byte("something-very-secret"))
 
 type ChatController struct {
 	beego.Controller
@@ -19,60 +21,65 @@ type Message struct {
 }
 
 func (c *ChatController) Post() {
-	if c.Ctx.Request.Header.Get("Authorization") != "" {
-		decoder := json.NewDecoder(c.Ctx.Request.Body)
-		var reqMessage Message
-		decoder.Decode(&reqMessage)
+	// if c.Ctx.Request.Header.Get("Authorization") != "" {
+	// }
+	decoder := json.NewDecoder(c.Ctx.Request.Body)
+	var reqMessage Message
+	decoder.Decode(&reqMessage)
+	message := strings.Split(reqMessage.Message, " ")
 
-		message := strings.Split(reqMessage.Message, " ")
+	session, err := store.Get(c.Ctx.Output.Context.Request, "session")
 
-		sess := session.Get(c.Ctx.Request)
+	if err != nil {
+		c.Data["json"] = &Message{Message: err.Error()}
+		c.Ctx.ResponseWriter.WriteHeader(500)
+	}
 
-		fmt.Println(message)
-
-		if sess == nil {
-			switch message[0] {
-			case "login":
-				ChatLogin(message[1], message[2], c)
-			case "register":
-				age, _ := strconv.Atoi(strings.Split(message[4], "\n")[0])
-				ChatRegister(message[1], message[2], message[3], age, c)
-			case "help":
-				c.Data["json"] = &Message{Message: "register username password name age, login username password"}
-				c.ServeJSON()
-			default:
-				c.Data["json"] = &Message{Message: "Please either login or register, use help to get the required comments"}
-				c.ServeJSON()
-			}
-		} else {
-
-			switch message[0] {
-			case "bot":
-				ChatBot(message[1], message[2], c)
-			case "scan":
-				ChatScan(c)
-			case "attack":
-				ChatAttack(c)
-			case "defend":
-				ChatDefend(c)
-			case "search":
-				lat, _ := strconv.ParseFloat(strings.Split(message[1], "\n")[0], 64)
-				longt, _ := strconv.ParseFloat(strings.Split(message[2], "\n")[0], 64)
-				fmt.Println("lat: ", lat, " long: ", longt)
-				ChatSearch(lat, longt, c)
-			case "showShop":
-				ChatShop(c)
-			case "buyItem":
-				name := strings.Split(c.GetString("message"), "'")[1]
-				ChatBuy(c, name)
-			default:
-				c.Data["json"] = &Message{Message: "Incorrect input"}
-				c.ServeJSON()
-			}
+	fmt.Println(message)
+	if session.Values["id"] == nil {
+		switch message[0] {
+		case "login":
+			fmt.Println("awesome")
+			ChatLogin(message[1], message[2], c)
+		case "register":
+			age, _ := strconv.Atoi(strings.Split(message[4], "\n")[0])
+			ChatRegister(message[1], message[2], message[3], age, c)
+		case "help":
+			c.Data["json"] = &Message{Message: "register username password name age, login username password"}
+			c.ServeJSON()
+		default:
+			c.Data["json"] = &Message{Message: "Please either login or register, use help to get the required comments"}
+			c.ServeJSON()
 		}
 	} else {
-		c.Data["json"] = &Message{Message: "Forbidden action: You have no uuid"}
-		c.Ctx.ResponseWriter.WriteHeader(403)
-		c.ServeJSON()
+
+		switch message[0] {
+		case "bot":
+			ChatBot(message[1], message[2], c)
+		case "scan":
+			ChatScan(c)
+		case "attack":
+			ChatAttack(c)
+		case "defend":
+			ChatDefend(c)
+		case "search":
+			lat, _ := strconv.ParseFloat(strings.Split(message[1], "\n")[0], 64)
+			longt, _ := strconv.ParseFloat(strings.Split(message[2], "\n")[0], 64)
+			fmt.Println("lat: ", lat, " long: ", longt)
+			ChatSearch(lat, longt, c)
+		case "showShop":
+			ChatShop(c)
+		case "buyItem":
+			name := strings.Split(c.GetString("message"), "'")[1]
+			ChatBuy(c, name)
+		default:
+			c.Data["json"] = &Message{Message: "Incorrect input"}
+			c.ServeJSON()
+		}
 	}
+	// } else {
+	// 	c.Data["json"] = &Message{Message: "Forbidden action: You have no uuid"}
+	// 	c.Ctx.ResponseWriter.WriteHeader(403)
+	// 	c.ServeJSON()
+	// }
 }

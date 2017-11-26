@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"Golang_RPG/models"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -10,7 +11,6 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/icza/session"
 	// "github.com/astaxie/beego/logs"
 )
 
@@ -47,15 +47,16 @@ func getBot(c *ChatController, id int, name string, o orm.Ormer) {
 		c.Data["json"] = &SuccessWOBot{Message: "Welcome " + name + " !", BotError: _err}
 		c.Ctx.ResponseWriter.WriteHeader(401)
 	} else {
-		sess := session.Get(c.Ctx.Request)
-		sess.SetAttr("inBattle", false)
-		sess.SetAttr("bot", bot)
+		session, _ := store.Get(c.Ctx.Request, "session")
+		session.Values["inBattle"] = false
+		session.Values["bot"] = bot
 		c.Data["json"] = &SuccessWBot{Message: "Welcome " + name + " !", Bot: &bot}
 	}
 }
 
 func ChatLogin(username string, password string, c *ChatController) {
 
+	fmt.Println("In da login")
 	o := orm.NewOrm()
 	user := models.Users{Username: username, Password: password}
 	err := o.Read(&user, "Username", "Password")
@@ -66,11 +67,15 @@ func ChatLogin(username string, password string, c *ChatController) {
 		c.Ctx.ResponseWriter.WriteHeader(401)
 
 	} else {
-		sess := session.NewSession()
-		// /c.SetSession("id", user.Id)
-		sess.SetAttr("id", user.Id)
+		session, err := store.Get(c.Ctx.Request, "session")
+		if err != nil {
+			c.Data["json"] = &Message{Message: err.Error()}
+			c.Ctx.ResponseWriter.WriteHeader(500)
+		}
+		fmt.Println("setting da cookie boy")
+		session.Values["id"] = user.Id
 		getBot(c, user.Id, user.Name, o)
-		session.Add(sess, c.Ctx.ResponseWriter)
+		session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 	}
 	c.ServeJSON()
 }

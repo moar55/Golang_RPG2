@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/icza/session"
 	// "github.com/astaxie/beego/logs"
 )
 
@@ -18,10 +17,9 @@ type Briefing struct {
 }
 
 func EnemyTurn(c *ChatController, enemy models.Enemies, player models.Bots) {
-	sess := session.Get(c.Ctx.Request)
 	//TODO: Add boss/skill logic
-	playerCurrentHealth, _ := sess.Attr("playerCurrentHealth").(int)
-	enemyCurrentHealth, _ := sess.Attr("enemyCurrentHealth").(int)
+	playerCurrentHealth, _ := c.GetSession("playerCurrentHealth").(int)
+	enemyCurrentHealth, _ := c.GetSession("enemyCurrentHealth").(int)
 
 	formula := enemy.Power
 
@@ -32,8 +30,8 @@ func EnemyTurn(c *ChatController, enemy models.Enemies, player models.Bots) {
 	if playerCurrentHealth <= 0 {
 		Lose(c)
 	} else {
-		sess.SetAttr("playerCurrentHealth", playerCurrentHealth)
-		sess.SetAttr("enemyCurrentHealth", enemyCurrentHealth)
+		c.SetSession("playerCurrentHealth", playerCurrentHealth)
+		c.SetSession("enemyCurrentHealth", enemyCurrentHealth)
 		c.Data["json"] = &Message{
 			Message: player.Name + ": " + strconv.Itoa(playerCurrentHealth) + " / " + strconv.Itoa(player.Maxhp) +
 				"    " + enemy.Name + ": " + strconv.Itoa(enemyCurrentHealth) + " / " + strconv.Itoa(enemy.Maxhp),
@@ -43,11 +41,9 @@ func EnemyTurn(c *ChatController, enemy models.Enemies, player models.Bots) {
 }
 
 func DEnemyTurn(c *ChatController, enemy models.Enemies, player models.Bots) {
-	sess := session.Get(c.Ctx.Request)
-
 	//TODO: Add boss/skill logic
-	playerCurrentHealth, _ := sess.Attr("playerCurrentHealth").(int)
-	enemyCurrentHealth, _ := sess.Attr("enemyCurrentHealth").(int)
+	playerCurrentHealth, _ := c.GetSession("playerCurrentHealth").(int)
+	enemyCurrentHealth, _ := c.GetSession("enemyCurrentHealth").(int)
 
 	formula := enemy.Power / 2
 
@@ -58,8 +54,8 @@ func DEnemyTurn(c *ChatController, enemy models.Enemies, player models.Bots) {
 	if playerCurrentHealth <= 0 {
 		DLose(c)
 	} else {
-		sess.SetAttr("playerCurrentHealth", playerCurrentHealth)
-		sess.SetAttr("enemyCurrentHealth", enemyCurrentHealth)
+		c.SetSession("playerCurrentHealth", playerCurrentHealth)
+		c.SetSession("enemyCurrentHealth", enemyCurrentHealth)
 		c.Data["json"] = &Message{
 			Message: player.Name + ": " + strconv.Itoa(playerCurrentHealth) + " / " + strconv.Itoa(player.Maxhp) +
 				"    " + enemy.Name + ": " + strconv.Itoa(enemyCurrentHealth) + " / " + strconv.Itoa(enemy.Maxhp),

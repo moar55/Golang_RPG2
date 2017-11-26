@@ -90,12 +90,6 @@
 			"revisionTime": "2017-03-13T07:41:01Z"
 		},
 		{
-			"checksumSHA1": "3We9BMv4qzYPw4HAitPfw9O27+A=",
-			"path": "github.com/icza/session",
-			"revision": "18040e14e0486c9cc8c96cd4af691ef1f1fe7915",
-			"revisionTime": "2017-06-19T14:13:11Z"
-		},
-		{
 			"checksumSHA1": "klQ0wW7q4yvBuZ7Q36LTTRfwzFk=",
 			"path": "github.com/ramin0/chatbot",
 			"revision": "c9bb79785b0225cdb629db50037d11361d8c0bed",

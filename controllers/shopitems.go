@@ -8,7 +8,6 @@ import (
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
-	"github.com/icza/session"
 )
 
 type NearestShopItemsController struct {
@@ -20,8 +19,7 @@ type Response2 struct {
 }
 
 func ChatShop(c *ChatController) {
-	sess := session.Get(c.Ctx.Request)
-	nearestShop := sess.CAttr("nearShop")
+	nearestShop := c.GetSession("nearShop")
 	if nearestShop == nil {
 		c.Data["json"] = &errors.SearchForShop.Message
 		c.Ctx.ResponseWriter.WriteHeader(errors.SearchForShop.HTTPStatus)

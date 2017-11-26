@@ -5,7 +5,6 @@ import (
 
 	"github.com/astaxie/beego"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/icza/session"
 	// "github.com/astaxie/beego/logs"
 )
 
@@ -14,8 +13,7 @@ type BattleDefendController struct {
 }
 
 func ChatDefend(c *ChatController) {
-	sess := session.Get(c.Ctx.Request)
-	enemy := sess.Attr("enemy").(models.Enemies)
-	player := sess.Attr("bot").(models.Bots)
+	enemy := c.GetSession("enemy").(models.Enemies)
+	player := c.GetSession("bot").(models.Bots)
 	DEnemyTurn(c, enemy, player)
 }

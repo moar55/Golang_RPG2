@@ -1,5 +1,7 @@
 package models
 
+import "encoding/gob"
+
 type Bots struct {
 	Id         int    `orm:"auto"`
 	Name       string `orm:"size(45)" ,json:"name"`
@@ -12,4 +14,11 @@ type Bots struct {
 	Fakka      int    `json:"fakka"`
 	Maxhp      int    `json:"maxhp"`
 	Maxmp      int    `json:"maxmp"`
+}
+
+type M map[string]interface{}
+
+func init() {
+	gob.Register(&Bots{})
+	gob.Register(&M{})
 }
