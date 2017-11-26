@@ -27,6 +27,7 @@ func init() {
 	}
 
 	fmt.Println("the connection string", connectionString)
+	fmt.Println(connectionString)
 
 	orm.RegisterDataBase("default", "mysql", connectionString)
 	orm.RegisterModel(new(models.Users))
