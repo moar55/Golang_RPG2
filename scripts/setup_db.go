@@ -26,6 +26,8 @@ func init() {
 		connectionString = beego.AppConfig.String("connectionString")
 	}
 
+	fmt.Println("the connection string", connectionString)
+
 	orm.RegisterDataBase("default", "mysql", connectionString)
 	orm.RegisterModel(new(models.Users))
 	orm.RegisterModel(new(models.Bots))
