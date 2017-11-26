@@ -35,8 +35,8 @@ func ChatScan(c *ChatController) {
 				//40% for a BATTLE!
 				if random < 90 {
 					//Battle stuff
-					c.SetSession("inBattle", true)
-					if c.GetSession("inLocation") == true {
+					session.Values["inBattle"] = true
+					if session.Values["inLocation"] == true {
 						//Found a BOSS enemy
 						var enemies []orm.Params
 						_, err := o.Raw("SELECT * FROM enemies WHERE type = ? order by rand() limit 1", "2").Values(&enemies)

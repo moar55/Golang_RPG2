@@ -1,6 +1,7 @@
 package models
 
 import (
+	"encoding/gob"
 	"strconv"
 	"strings"
 
@@ -65,4 +66,9 @@ func TurnToEnemy(enemy orm.Params) Enemies {
 		Drop_item: DropItem,
 		Power:     Power,
 	}
+}
+
+func init() {
+	gob.Register(&Enemies{})
+	gob.Register(&M{})
 }

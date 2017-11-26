@@ -37,6 +37,8 @@ func (c *ChatController) Post() {
 
 	fmt.Println(message)
 	if session.Values["id"] == nil {
+		fmt.Println("the session is", session)
+
 		switch message[0] {
 		case "login":
 			fmt.Println("awesome")
