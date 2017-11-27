@@ -83,7 +83,7 @@ func ChatLogin(username string, password string, c *ChatController) {
 		session.Values["id"] = user.Id
 		fmt.Println("the session is", session.Values["id"])
 		getBot(c, user.Id, user.Name, o)
-		session.Save(c.Ctx.Request, c.Ctx.ResponseWriter.ResponseWriter)
+		session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 	}
 	// r.JSON(c.Ctx.ResponseWriter, http.StatusOK, map[string]string{"hello": "json"})
 
