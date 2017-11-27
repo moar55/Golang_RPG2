@@ -85,5 +85,8 @@ func ChatLogin(username string, password string, c *ChatController) {
 		getBot(c, user.Id, user.Name, o)
 		session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 	}
+	fmt.Println("da coookie", c.Ctx.GetCookie("id"))
+	fmt.Println("da coookie", c.Ctx.GetCookie("session"))
+
 	c.ServeJSON()
 }
