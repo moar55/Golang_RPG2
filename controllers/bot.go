@@ -18,7 +18,8 @@ type Ayhabal struct {
 func ChatBot(name string, race string, c *ChatController) {
 
 	o := orm.NewOrm()
-	_id := c.GetSession("id")
+	session, _ := store.Get(c.Ctx.Request, "session")
+	_id := session.Values["id"]
 	if _id != nil {
 		id := _id.(int)
 		_bot := models.Bots{User_id: id}
