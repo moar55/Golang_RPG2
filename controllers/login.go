@@ -3,7 +3,6 @@ package controllers
 import (
 	"Golang_RPG/models"
 	"fmt"
-	"net/http"
 	"strconv"
 	"strings"
 
@@ -11,9 +10,6 @@ import (
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/gorilla/sessions"
-	"github.com/unrolled/render"
 	// "github.com/astaxie/beego/logs"
 )
 
@@ -48,7 +44,6 @@ func getBot(c *ChatController, id int, name string, o orm.Ormer) {
 			_err = err.Error()
 		}
 		c.Data["json"] = &SuccessWOBot{Message: "Welcome " + name + " !", BotError: _err}
-		c.Ctx.ResponseWriter.WriteHeader(401)
 	} else {
 		session, _ := store.Get(c.Ctx.Request, "session")
 		fmt.Println("the session is", session)
@@ -59,7 +54,6 @@ func getBot(c *ChatController, id int, name string, o orm.Ormer) {
 }
 
 func ChatLogin(username string, password string, c *ChatController) {
-	r := render.New()
 
 	fmt.Println("In da login")
 	o := orm.NewOrm()
@@ -73,11 +67,14 @@ func ChatLogin(username string, password string, c *ChatController) {
 
 	} else {
 		session, err := store.Get(c.Ctx.Request, "session")
-		session.Options = &sessions.Options{
-			Path:     "/",
-			MaxAge:   86400 * 7,
-			HttpOnly: true,
-		}
+		session.Options.HttpOnly = true
+		// mysqlstore.MySQLStore.Options.HttpOnly = true
+
+		// 	Path:     "/",
+		// 	MaxAge:   86400 * 7,
+		// 	HttpOnly: true,
+		// }
+
 		if err != nil {
 			c.Data["json"] = &Message{Message: err.Error()}
 			c.Ctx.ResponseWriter.WriteHeader(500)
@@ -86,9 +83,9 @@ func ChatLogin(username string, password string, c *ChatController) {
 		session.Values["id"] = user.Id
 		fmt.Println("the session is", session.Values["id"])
 		getBot(c, user.Id, user.Name, o)
-		session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
+		session.Save(c.Ctx.Request, c.Ctx.ResponseWriter.ResponseWriter)
 	}
-	r.JSON(c.Ctx.ResponseWriter, http.StatusOK, map[string]string{"hello": "json"})
+	// r.JSON(c.Ctx.ResponseWriter, http.StatusOK, map[string]string{"hello": "json"})
 
-	// c.ServeJSON()
+	c.ServeJSON()
 }

@@ -32,11 +32,15 @@ func init() {
 	fmt.Println("the connection string", connectionString, maxIdle, maxConn)
 	fmt.Println(connectionString)
 
-	orm.RegisterDataBase("default", "mysql", connectionString)
+	// orm.RegisterDataBase("default", "mysql", connectionString)
 	orm.RegisterModel(new(models.Users))
 	orm.RegisterModel(new(models.Bots))
 	orm.RegisterModel(new(models.Inventory))
 	orm.RegisterModel(new(models.Enemies))
 	orm.RegisterModel(new(models.Locations))
 	orm.RegisterModel(new(models.ShopItems), new(models.Items))
+}
+
+func init() {
+	fmt.Println("hello")
 }
