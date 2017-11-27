@@ -26,7 +26,7 @@ func init() {
 		connectionString = beego.AppConfig.String("connectionString")
 	}
 
-	maxIdle := 30
+	maxIdle := 0
 	maxConn := 30
 
 	fmt.Println("the connection string", connectionString, maxIdle, maxConn)
