@@ -24,7 +24,12 @@ $("#submit").on('click',() => {
       dataType: 'json',
       success: function (data) {
           console.info("first",data);
-          $("#output").text(data.message);
+          if(data.message){
+            $("#output").text(data.message);
+
+          }
+          else
+          $("#output").text(data.Message);
     }, failure: function (err) {
       $("#output").text(err.message);
     }
