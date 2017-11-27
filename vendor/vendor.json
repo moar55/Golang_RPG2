@@ -120,6 +120,12 @@
 			"revisionTime": "2017-03-21T23:07:31Z"
 		},
 		{
+			"checksumSHA1": "/CkShsXSmW4032TjVej9ZwhjxOY=",
+			"path": "github.com/unrolled/render",
+			"revision": "65450fb6b2d3595beca39f969c411db8f8d5c806",
+			"revisionTime": "2017-11-02T16:21:32Z"
+		},
+		{
 			"checksumSHA1": "GtamqiJoL7PGHsN454AoffBFMa8=",
 			"path": "golang.org/x/net/context",
 			"revision": "c73622c77280266305273cb545f54516ced95b93",
