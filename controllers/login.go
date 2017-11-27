@@ -3,6 +3,7 @@ package controllers
 import (
 	"Golang_RPG/models"
 	"fmt"
+	"net/http"
 	"strconv"
 	"strings"
 
@@ -12,6 +13,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/sessions"
+	"github.com/unrolled/render"
 	// "github.com/astaxie/beego/logs"
 )
 
@@ -57,6 +59,7 @@ func getBot(c *ChatController, id int, name string, o orm.Ormer) {
 }
 
 func ChatLogin(username string, password string, c *ChatController) {
+	r := render.New()
 
 	fmt.Println("In da login")
 	o := orm.NewOrm()
@@ -85,8 +88,7 @@ func ChatLogin(username string, password string, c *ChatController) {
 		getBot(c, user.Id, user.Name, o)
 		session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 	}
-	fmt.Println("da coookie", c.Ctx.GetCookie("id"))
-	fmt.Println("da coookie", c.Ctx.GetCookie("session"))
+	r.JSON(c.Ctx.ResponseWriter, http.StatusOK, map[string]string{"hello": "json"})
 
-	c.ServeJSON()
+	// c.ServeJSON()
 }
