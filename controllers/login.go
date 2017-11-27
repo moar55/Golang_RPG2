@@ -81,6 +81,7 @@ func ChatLogin(username string, password string, c *ChatController) {
 		}
 		fmt.Println("setting da cookie boy")
 		session.Values["id"] = user.Id
+		fmt.Println("the session is", session.Values)
 		getBot(c, user.Id, user.Name, o)
 		session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 	}
