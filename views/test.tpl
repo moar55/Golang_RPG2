@@ -25,6 +25,8 @@ $("#submit").on('click',() => {
       success: function (data) {
           console.info("first",data);
           $("#output").text(data.message);
+    }, failure: function (err) {
+      $("#output").text(err.message);
     }
   });
 })
