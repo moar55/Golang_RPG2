@@ -31,6 +31,9 @@ func ChatRegister(username string, password string, name string, age int, c *Cha
 		c.Data["json"] = &Message{Message: "Congratulations, you just registered! Welcome, " + x.Name + ". \n" +
 			"You can use 'scan' to scan for nearby enemies or items, or you can type 'location' and enter your coordinates to look for shops",
 		}
+		session, _ := store.Get(c.Ctx.Request, "session")
+		session.Values["id"] = x.Id
+		session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 	}
 	c.ServeJSON()
 }

@@ -16,7 +16,7 @@ type Briefing struct {
 	EnemyHealth    int
 }
 
-func EnemyTurn(c *ChatController, enemy models.Enemies, player models.Bots) {
+func EnemyTurn(c *ChatController, enemy *models.Enemies, player *models.Bots) {
 	//TODO: Add boss/skill logic
 	playerCurrentHealth, _ := c.GetSession("playerCurrentHealth").(int)
 	enemyCurrentHealth, _ := c.GetSession("enemyCurrentHealth").(int)
@@ -40,7 +40,7 @@ func EnemyTurn(c *ChatController, enemy models.Enemies, player models.Bots) {
 	}
 }
 
-func DEnemyTurn(c *ChatController, enemy models.Enemies, player models.Bots) {
+func DEnemyTurn(c *ChatController, enemy *models.Enemies, player *models.Bots) {
 	//TODO: Add boss/skill logic
 	playerCurrentHealth, _ := c.GetSession("playerCurrentHealth").(int)
 	enemyCurrentHealth, _ := c.GetSession("enemyCurrentHealth").(int)

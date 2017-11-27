@@ -34,6 +34,10 @@ func init() {
 	// fmt.Println(store2)
 }
 
+func loggedIn(session *sessions.Session) bool {
+	return session.Values["id"] != nil
+}
+
 func (c *ChatController) Post() {
 	// if c.Ctx.Request.Header.Get("Authorization") != "" {
 	// }
@@ -50,24 +54,49 @@ func (c *ChatController) Post() {
 	}
 
 	fmt.Println(message)
-	if session.Values["id"] == nil {
-		fmt.Println("the session is", session)
+	fmt.Println("the session is", session)
 
-		switch message[0] {
-		case "login":
-			fmt.Println("awesome")
-			ChatLogin(message[1], message[2], c)
-		case "register":
-			age, _ := strconv.Atoi(strings.Split(message[4], "\n")[0])
-			ChatRegister(message[1], message[2], message[3], age, c)
-		case "help":
-			c.Data["json"] = &Message{Message: "register username password name age, login username password"}
+	switch message[0] {
+	case "login":
+		if loggedIn(session) {
+			c.Ctx.ResponseWriter.WriteHeader(400)
+			c.Data["json"] = &Message{Message: "You are already logged in, please logout first"}
+			session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 			c.ServeJSON()
-		default:
+		}
+		ChatLogin(message[1], message[2], c)
+	case "register":
+		if loggedIn(session) {
+			c.Data["json"] = &Message{Message: "You are already logged in"}
+			c.Ctx.ResponseWriter.WriteHeader(400)
+			session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
+			c.ServeJSON()
+		}
+		age, _ := strconv.Atoi(strings.Split(message[4], "\n")[0])
+		ChatRegister(message[1], message[2], message[3], age, c)
+	case "logout":
+		if !loggedIn(session) {
+			c.Data["json"] = &Message{Message: "You aren't logged ins"}
+			c.Ctx.ResponseWriter.WriteHeader(400)
+			session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
+			c.ServeJSON()
+		} else {
+			session.Values["id"] = nil
+			c.Data["json"] = &Message{Message: "Logged out"}
+			session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
+			c.ServeJSON()
+		}
+	case "help":
+		c.Data["json"] = &Message{Message: "register username password name age, login username password, scan to find enemies, bot <name> <race> to create bot, showShop to show nearest shop, buyItem <itemname> to buy an item"}
+		c.ServeJSON()
+	default:
+		if !loggedIn(session) {
 			c.Data["json"] = &Message{Message: "Please either login or register, use help to get the required comments"}
 			c.ServeJSON()
 		}
-	} else {
+	}
+
+	if loggedIn(session) {
 
 		switch message[0] {
 		case "bot":
@@ -89,7 +118,7 @@ func (c *ChatController) Post() {
 			name := strings.Split(c.GetString("message"), "'")[1]
 			ChatBuy(c, name)
 		default:
-			c.Data["json"] = &Message{Message: "Incorrect input"}
+			c.Data["json"] = &Message{Message: "Incorrect input. Use help to get possible commands"}
 			c.ServeJSON()
 		}
 	}

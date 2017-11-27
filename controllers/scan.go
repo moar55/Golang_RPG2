@@ -45,9 +45,9 @@ func ChatScan(c *ChatController) {
 						} else {
 							fmt.Println(enemies[0])
 							enemy := models.TurnToEnemy(enemies[0])
-							c.SetSession("enemyCurrentHealth", enemy.Maxhp)
-							c.SetSession("playerCurrentHealth", c.GetSession("bot").(models.Bots).Maxhp)
-							c.SetSession("enemy", enemy)
+							session.Values["enemyCurrentHealth"] = enemy.Maxhp
+							session.Values["playerCurrentHealth"] = session.Values["bot"].(*models.Bots).Maxhp
+							session.Values["enemy"] = enemy
 							c.Data["json"] = scan.EnterBattle("found random BOSS enemy! ", "boss", enemy)
 						}
 					} else {
@@ -59,11 +59,11 @@ func ChatScan(c *ChatController) {
 						} else {
 							fmt.Println(enemies[0])
 							enemy := models.TurnToEnemy(enemies[0])
-							player := c.GetSession("bot").(models.Bots)
-							c.SetSession("enemyCurrentHealth", enemy.Maxhp)
-							c.SetSession("playerCurrentHealth", player.Maxhp)
+							player := session.Values["bot"].(*models.Bots)
+							session.Values["enemyCurrentHealth"] = enemy.Maxhp
+							session.Values["playerCurrentHealth"] = player.Maxhp
 							fmt.Println(player)
-							c.SetSession("enemy", enemy)
+							session.Values["enemy"] = enemy
 							c.Data["json"] = scan.EnterBattle("found a random normal enemy! ", "normal", enemy)
 						}
 					}
@@ -77,7 +77,7 @@ func ChatScan(c *ChatController) {
 					} else {
 						fmt.Println(items[0])
 						item := models.TurnToItem(items[0])
-						bot := c.GetSession("bot").(models.Bots)
+						bot := session.Values["bot"].(*models.Bots)
 						c.Data["json"] = scan.FoundItem("Found an item! ", item, bot.Id)
 					}
 				}
@@ -89,5 +89,7 @@ func ChatScan(c *ChatController) {
 	} else {
 		c.Data["json"] = &errors.ErrorMessage{Message: "Please login and/or create a bot"}
 	}
+	session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
+
 	c.ServeJSON()
 }

@@ -43,7 +43,7 @@ func ChatBuy(c *ChatController, name string) {
 			c.Data["json"] = &errors.ItemNotFound.Message
 			c.Ctx.ResponseWriter.WriteHeader(errors.ItemNotFound.HTTPStatus)
 		} else {
-			bot := c.GetSession("bot").(models.Bots)
+			bot := c.GetSession("bot").(*models.Bots)
 			if bot.Fakka <= shopItem.Price {
 				c.Data["json"] = &errors.NoEnoughFakka.Message
 				c.Ctx.ResponseWriter.WriteHeader(errors.NoEnoughFakka.HTTPStatus)

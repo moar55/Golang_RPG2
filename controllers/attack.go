@@ -15,8 +15,8 @@ type BattleAttackController struct {
 }
 
 func attack(c *ChatController) {
-	player := c.GetSession("bot").(models.Bots)
-	enemy := c.GetSession("enemy").(models.Enemies)
+	player := c.GetSession("bot").(*models.Bots)
+	enemy := c.GetSession("enemy").(*models.Enemies)
 
 	enemyCurrentHealth, _ := c.GetSession("enemyCurrentHealth").(int)
 
