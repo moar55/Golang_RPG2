@@ -24,7 +24,7 @@ $("#submit").on('click',() => {
       dataType: 'json',
       success: function (data) {
           console.info("first",data);
-          $("#output").val(data);
+          $("#output").text(data.message);
     }
   });
 })
