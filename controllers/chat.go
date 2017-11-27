@@ -63,6 +63,7 @@ func (c *ChatController) Post() {
 			c.Data["json"] = &Message{Message: "You are already logged in, please logout first"}
 			session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 			c.ServeJSON()
+			return
 		}
 		ChatLogin(message[1], message[2], c)
 	case "register":
@@ -71,6 +72,7 @@ func (c *ChatController) Post() {
 			c.Ctx.ResponseWriter.WriteHeader(400)
 			session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 			c.ServeJSON()
+			return
 		}
 		age, _ := strconv.Atoi(strings.Split(message[4], "\n")[0])
 		ChatRegister(message[1], message[2], message[3], age, c)
@@ -86,13 +88,16 @@ func (c *ChatController) Post() {
 			session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 			c.ServeJSON()
 		}
+		return
 	case "help":
 		c.Data["json"] = &Message{Message: "register username password name age, login username password, scan to find enemies, bot <name> <race> to create bot, showShop to show nearest shop, buyItem <itemname> to buy an item"}
 		c.ServeJSON()
+		return
 	default:
 		if !loggedIn(session) {
 			c.Data["json"] = &Message{Message: "Please either login or register, use help to get the required comments"}
 			c.ServeJSON()
+			return
 		}
 	}
 
