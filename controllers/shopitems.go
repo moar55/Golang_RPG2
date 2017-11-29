@@ -42,6 +42,7 @@ func ChatShop(c *ChatController) {
 			// use the own below me for easier readabiliy (pure json :3)
 			// c.Data["json"] = &Response2{Response: shopItems}
 		}
+		session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 		c.ServeJSON(true)
 	}
 }

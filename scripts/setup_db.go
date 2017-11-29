@@ -29,9 +29,6 @@ func init() {
 	maxIdle := 0
 	maxConn := 30
 
-	fmt.Println("the connection string", connectionString, maxIdle, maxConn)
-	fmt.Println(connectionString)
-
 	orm.RegisterDataBase("default", "mysql", connectionString)
 	orm.RegisterModel(new(models.Users))
 	orm.RegisterModel(new(models.Bots))

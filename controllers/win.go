@@ -16,5 +16,6 @@ func Win(c *ChatController) {
 	enemy := session.Values["enemy"].(*models.Enemies)
 	session.Values["inBattle"] = false
 	c.Data["json"] = &Message{Message: "You won! You gained " + strconv.Itoa(enemy.Fakka) + " Fakka!"}
+	session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 	c.ServeJSON()
 }

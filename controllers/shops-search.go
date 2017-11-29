@@ -65,6 +65,7 @@ func ChatSearch(latitude float64, longitude float64, c *ChatController) {
 				}
 			}
 		}
+		session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 		c.ServeJSON(true)
 	}
 }

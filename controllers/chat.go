@@ -39,97 +39,114 @@ func loggedIn(session *sessions.Session) bool {
 }
 
 func (c *ChatController) Post() {
-	// if c.Ctx.Request.Header.Get("Authorization") != "" {
-	// }
-	decoder := json.NewDecoder(c.Ctx.Request.Body)
-	var reqMessage Message
-	decoder.Decode(&reqMessage)
-	message := strings.Split(reqMessage.Message, " ")
-	session, err := store.Get(c.Ctx.Output.Context.Request, "session")
-	session.Options.HttpOnly = true
+	if c.Ctx.Request.Header.Get("Authorization") != "" {
+		decoder := json.NewDecoder(c.Ctx.Request.Body)
+		var reqMessage Message
+		decoder.Decode(&reqMessage)
+		message := strings.Split(reqMessage.Message, " ")
+		session, err := store.Get(c.Ctx.Output.Context.Request, "session")
+		session.Options.HttpOnly = true
 
-	if err != nil {
-		c.Data["json"] = &Message{Message: err.Error()}
-		c.Ctx.ResponseWriter.WriteHeader(500)
-	}
+		if err != nil {
+			c.Data["json"] = &Message{Message: err.Error()}
+			c.Ctx.ResponseWriter.WriteHeader(500)
+		}
 
-	fmt.Println(message)
-	fmt.Println("the session is", session)
-
-	switch message[0] {
-	case "login":
-		if loggedIn(session) {
-			c.Ctx.ResponseWriter.WriteHeader(400)
-			c.Data["json"] = &Message{Message: "You are already logged in, please logout first"}
-			session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
-			c.ServeJSON()
-			return
-		}
-		ChatLogin(message[1], message[2], c)
-	case "register":
-		if loggedIn(session) {
-			c.Data["json"] = &Message{Message: "You are already logged in"}
-			c.Ctx.ResponseWriter.WriteHeader(400)
-			session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
-			c.ServeJSON()
-			return
-		}
-		age, _ := strconv.Atoi(strings.Split(message[4], "\n")[0])
-		ChatRegister(message[1], message[2], message[3], age, c)
-	case "logout":
-		if !loggedIn(session) {
-			c.Data["json"] = &Message{Message: "You aren't logged ins"}
-			c.Ctx.ResponseWriter.WriteHeader(400)
-			session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
-			c.ServeJSON()
-		} else {
-			session.Values["id"] = nil
-			c.Data["json"] = &Message{Message: "Logged out"}
-			session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
-			c.ServeJSON()
-		}
-		return
-	case "help":
-		c.Data["json"] = &Message{Message: "register username password name age, login username password, scan to find enemies, bot <name> <race> to create bot, showShop to show nearest shop, buyItem <itemname> to buy an item"}
-		c.ServeJSON()
-		return
-	default:
-		if !loggedIn(session) {
-			c.Data["json"] = &Message{Message: "Please either login or register, use help to get the required comments"}
-			c.ServeJSON()
-			return
-		}
-	}
-
-	if loggedIn(session) {
+		fmt.Println(message)
+		fmt.Println("the session is", session)
 
 		switch message[0] {
-		case "bot":
-			ChatBot(message[1], message[2], c)
-		case "scan":
-			ChatScan(c)
-		case "attack":
-			ChatAttack(c)
-		case "defend":
-			ChatDefend(c)
-		case "search":
-			lat, _ := strconv.ParseFloat(strings.Split(message[1], "\n")[0], 64)
-			longt, _ := strconv.ParseFloat(strings.Split(message[2], "\n")[0], 64)
-			fmt.Println("lat: ", lat, " long: ", longt)
-			ChatSearch(lat, longt, c)
-		case "showShop":
-			ChatShop(c)
-		case "buyItem":
-			name := strings.Split(c.GetString("message"), "'")[1]
-			ChatBuy(c, name)
-		default:
-			c.Data["json"] = &Message{Message: "Incorrect input. Use help to get possible commands"}
+		case "login":
+			if loggedIn(session) {
+				c.Ctx.ResponseWriter.WriteHeader(400)
+				c.Data["json"] = &Message{Message: "You are already logged in, please logout first"}
+				session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
+				c.ServeJSON()
+				return
+			}
+			ChatLogin(message[1], message[2], c)
+		case "register":
+			if loggedIn(session) {
+				c.Data["json"] = &Message{Message: "You are already logged in"}
+				c.Ctx.ResponseWriter.WriteHeader(400)
+				session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
+				c.ServeJSON()
+				return
+			}
+			age, _ := strconv.Atoi(strings.Split(message[4], "\n")[0])
+			ChatRegister(message[1], message[2], message[3], age, c)
+		case "logout":
+			if !loggedIn(session) {
+				c.Data["json"] = &Message{Message: "You aren't logged ins"}
+				c.Ctx.ResponseWriter.WriteHeader(400)
+				session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
+				c.ServeJSON()
+			} else {
+				session.Values["id"] = nil
+				c.Data["json"] = &Message{Message: "Logged out"}
+				session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
+				c.ServeJSON()
+			}
+			return
+		case "help":
+			c.Data["json"] = &Message{Message: "register username password name age, login username password, scan to find enemies, bot <name> <race> to create bot, showShop to show nearest shop, buyItem <itemname> to buy an item"}
 			c.ServeJSON()
+			return
+		default:
+			if !loggedIn(session) {
+				c.Data["json"] = &Message{Message: "Please either login or register, use help to get the required comments"}
+				c.ServeJSON()
+				return
+			}
 		}
+
+		if loggedIn(session) {
+
+			switch message[0] {
+			case "bot":
+				ChatBot(message[1], message[2], c)
+			case "scan":
+				ChatScan(c)
+			case "attack":
+				if session.Values["inBattle"] == true {
+					ChatAttack(c)
+				} else {
+					c.Data["json"] = &Message{Message: "You aren't in a battle!"}
+					c.Ctx.ResponseWriter.WriteHeader(400)
+					c.ServeJSON()
+				}
+			case "defend":
+				if session.Values["inBattle"] == true {
+					ChatDefend(c)
+				} else {
+					c.Data["json"] = &Message{Message: "You aren't in a battle!"}
+					c.Ctx.ResponseWriter.WriteHeader(400)
+					c.ServeJSON()
+				}
+			case "search":
+				if session.Values["inBattle"] == true {
+					c.Data["json"] = &Message{Message: "You can't search in a battle!"}
+					c.Ctx.ResponseWriter.WriteHeader(400)
+					c.ServeJSON()
+					return
+				}
+				lat, _ := strconv.ParseFloat(strings.Split(message[1], "\n")[0], 64)
+				longt, _ := strconv.ParseFloat(strings.Split(message[2], "\n")[0], 64)
+				fmt.Println("lat: ", lat, " long: ", longt)
+				ChatSearch(lat, longt, c)
+			case "showShop":
+				ChatShop(c)
+			case "buyItem":
+				name := strings.Split(c.GetString("message"), "'")[1]
+				ChatBuy(c, name)
+			default:
+				c.Data["json"] = &Message{Message: "Incorrect input. Use help to get possible commands"}
+				c.ServeJSON()
+			}
+		}
+	} else {
+		c.Data["json"] = &Message{Message: "Forbidden action: You have no uuid"}
+		c.Ctx.ResponseWriter.WriteHeader(403)
+		c.ServeJSON()
 	}
-	// } else {
-	// 	c.Data["json"] = &Message{Message: "Forbidden action: You have no uuid"}
-	// 	c.Ctx.ResponseWriter.WriteHeader(403)
-	// 	c.ServeJSON()
-	// }
 }

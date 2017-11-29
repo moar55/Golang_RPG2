@@ -62,6 +62,7 @@ func ChatBuy(c *ChatController, name string) {
 			}
 		}
 	}
+	session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 	c.ServeJSON(true)
 
 }

@@ -51,5 +51,6 @@ func ChatBot(name string, race string, c *ChatController) {
 		c.Data["json"] = &errors.NotLoggedIn.Message
 		c.Ctx.ResponseWriter.WriteHeader(401)
 	}
+	session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 	c.ServeJSON()
 }

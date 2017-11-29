@@ -38,6 +38,7 @@ func EnemyTurn(c *ChatController, enemy *models.Enemies, player *models.Bots) {
 			Message: player.Name + ": " + strconv.Itoa(playerCurrentHealth) + " / " + strconv.Itoa(player.Maxhp) +
 				"    " + enemy.Name + ": " + strconv.Itoa(enemyCurrentHealth) + " / " + strconv.Itoa(enemy.Maxhp),
 		}
+		session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 		c.ServeJSON()
 	}
 }
@@ -64,6 +65,7 @@ func DEnemyTurn(c *ChatController, enemy *models.Enemies, player *models.Bots) {
 			Message: player.Name + ": " + strconv.Itoa(playerCurrentHealth) + " / " + strconv.Itoa(player.Maxhp) +
 				"    " + enemy.Name + ": " + strconv.Itoa(enemyCurrentHealth) + " / " + strconv.Itoa(enemy.Maxhp),
 		}
+		session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 		c.ServeJSON()
 	}
 }

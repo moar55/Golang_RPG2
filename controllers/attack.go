@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"Golang_RPG/models"
+	"fmt"
 	"math/rand"
 	"time"
 
@@ -28,6 +29,8 @@ func attack(c *ChatController) {
 		random = 1
 	}
 
+	fmt.Println(random)
+
 	enemyCurrentHealth = enemyCurrentHealth - (player.Attack-enemy.Defense/100)*random
 
 	if enemyCurrentHealth <= 0 {
@@ -39,5 +42,6 @@ func attack(c *ChatController) {
 }
 
 func ChatAttack(c *ChatController) {
+	fmt.Println("in attack!!!")
 	attack(c)
 }
