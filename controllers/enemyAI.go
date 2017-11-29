@@ -17,9 +17,11 @@ type Briefing struct {
 }
 
 func EnemyTurn(c *ChatController, enemy *models.Enemies, player *models.Bots) {
+	session, _ := store.Get(c.Ctx.Output.Context.Request, "session")
+
 	//TODO: Add boss/skill logic
-	playerCurrentHealth, _ := c.GetSession("playerCurrentHealth").(int)
-	enemyCurrentHealth, _ := c.GetSession("enemyCurrentHealth").(int)
+	playerCurrentHealth, _ := session.Values["playerCurrentHealth"].(int)
+	enemyCurrentHealth, _ := session.Values["enemyCurrentHealth"].(int)
 
 	formula := enemy.Power
 
@@ -30,8 +32,8 @@ func EnemyTurn(c *ChatController, enemy *models.Enemies, player *models.Bots) {
 	if playerCurrentHealth <= 0 {
 		Lose(c)
 	} else {
-		c.SetSession("playerCurrentHealth", playerCurrentHealth)
-		c.SetSession("enemyCurrentHealth", enemyCurrentHealth)
+		session.Values["playerCurrentHealth"] = playerCurrentHealth
+		session.Values["enemyCurrentHealth"] = enemyCurrentHealth
 		c.Data["json"] = &Message{
 			Message: player.Name + ": " + strconv.Itoa(playerCurrentHealth) + " / " + strconv.Itoa(player.Maxhp) +
 				"    " + enemy.Name + ": " + strconv.Itoa(enemyCurrentHealth) + " / " + strconv.Itoa(enemy.Maxhp),
@@ -42,8 +44,10 @@ func EnemyTurn(c *ChatController, enemy *models.Enemies, player *models.Bots) {
 
 func DEnemyTurn(c *ChatController, enemy *models.Enemies, player *models.Bots) {
 	//TODO: Add boss/skill logic
-	playerCurrentHealth, _ := c.GetSession("playerCurrentHealth").(int)
-	enemyCurrentHealth, _ := c.GetSession("enemyCurrentHealth").(int)
+	session, _ := store.Get(c.Ctx.Output.Context.Request, "session")
+
+	playerCurrentHealth, _ := session.Values["playerCurrentHealth"].(int)
+	enemyCurrentHealth, _ := session.Values["enemyCurrentHealth"].(int)
 
 	formula := enemy.Power / 2
 
@@ -54,8 +58,8 @@ func DEnemyTurn(c *ChatController, enemy *models.Enemies, player *models.Bots) {
 	if playerCurrentHealth <= 0 {
 		DLose(c)
 	} else {
-		c.SetSession("playerCurrentHealth", playerCurrentHealth)
-		c.SetSession("enemyCurrentHealth", enemyCurrentHealth)
+		session.Values["playerCurrentHealth"] = playerCurrentHealth
+		session.Values["enemyCurrentHealth"] = enemyCurrentHealth
 		c.Data["json"] = &Message{
 			Message: player.Name + ": " + strconv.Itoa(playerCurrentHealth) + " / " + strconv.Itoa(player.Maxhp) +
 				"    " + enemy.Name + ": " + strconv.Itoa(enemyCurrentHealth) + " / " + strconv.Itoa(enemy.Maxhp),

@@ -12,8 +12,9 @@ type win struct {
 }
 
 func Win(c *ChatController) {
-	enemy := c.GetSession("enemy").(models.Enemies)
-	c.SetSession("inBattle", false)
+	session, _ := store.Get(c.Ctx.Output.Context.Request, "session")
+	enemy := session.Values["enemy"].(*models.Enemies)
+	session.Values["inBattle"] = false
 	c.Data["json"] = &Message{Message: "You won! You gained " + strconv.Itoa(enemy.Fakka) + " Fakka!"}
 	c.ServeJSON()
 }

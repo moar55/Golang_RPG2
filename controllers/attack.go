@@ -15,10 +15,10 @@ type BattleAttackController struct {
 }
 
 func attack(c *ChatController) {
-	player := c.GetSession("bot").(*models.Bots)
-	enemy := c.GetSession("enemy").(*models.Enemies)
-
-	enemyCurrentHealth, _ := c.GetSession("enemyCurrentHealth").(int)
+	session, _ := store.Get(c.Ctx.Output.Context.Request, "session")
+	player := session.Values["bot"].(*models.Bots)
+	enemy := session.Values["enemy"].(*models.Enemies)
+	enemyCurrentHealth, _ := session.Values["enemyCurrentHealth"].(int)
 
 	rand.Seed(time.Now().UTC().UnixNano())
 	random := rand.Intn(500)
@@ -33,7 +33,7 @@ func attack(c *ChatController) {
 	if enemyCurrentHealth <= 0 {
 		Win(c)
 	} else {
-		c.SetSession("enemyCurrentHealth", enemyCurrentHealth)
+		session.Values["enemyCurrentHealth"] = enemyCurrentHealth
 		EnemyTurn(c, enemy, player)
 	}
 }

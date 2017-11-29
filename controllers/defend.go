@@ -13,7 +13,8 @@ type BattleDefendController struct {
 }
 
 func ChatDefend(c *ChatController) {
-	enemy := c.GetSession("enemy").(*models.Enemies)
-	player := c.GetSession("bot").(*models.Bots)
+	session, _ := store.Get(c.Ctx.Output.Context.Request, "session")
+	enemy := session.Values["enemy"].(*models.Enemies)
+	player := session.Values["bot"].(*models.Bots)
 	DEnemyTurn(c, enemy, player)
 }

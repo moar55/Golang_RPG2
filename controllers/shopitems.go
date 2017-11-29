@@ -19,7 +19,8 @@ type Response2 struct {
 }
 
 func ChatShop(c *ChatController) {
-	nearestShop := c.GetSession("nearShop")
+	session, _ := store.Get(c.Ctx.Output.Context.Request, "session")
+	nearestShop := session.Values["nearShop"]
 	if nearestShop == nil {
 		c.Data["json"] = &errors.SearchForShop.Message
 		c.Ctx.ResponseWriter.WriteHeader(errors.SearchForShop.HTTPStatus)

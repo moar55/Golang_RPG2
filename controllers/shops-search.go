@@ -21,6 +21,7 @@ type Response struct {
 }
 
 func ChatSearch(latitude float64, longitude float64, c *ChatController) {
+	session, _ := store.Get(c.Ctx.Output.Context.Request, "session")
 	c2, err := maps.NewClient(maps.WithAPIKey(beego.AppConfig.String("googlePlacesKey")))
 	r := &maps.NearbySearchRequest{Location: &maps.LatLng{Lat: latitude, Lng: longitude}, RankBy: "distance", Type: "stadium"}
 	resp, err := c2.NearbySearch(context.Background(), r)
@@ -57,7 +58,7 @@ func ChatSearch(latitude float64, longitude float64, c *ChatController) {
 					c.Data["json"] = &Response{Message: message}
 				} else if distance <= 5 {
 					c.Data["json"] = &Response{Message: "A nearby shop is just beside you. Type access to access it!"}
-					c.SetSession("nearShop", location.Id)
+					session.Values["nearShop"] = location.Id
 				} else {
 					c.Data["json"] = &Response{Message: "No nearby shops!"}
 

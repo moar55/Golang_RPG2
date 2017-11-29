@@ -11,8 +11,9 @@ func Lose(c *ChatController) {
 }
 
 func DLose(c *ChatController) {
+	session, _ := store.Get(c.Ctx.Output.Context.Request, "session")
 	c.Data["json"] = &Message{Message: "You lose..."}
-	c.SetSession("inBattle", false)
+	session.Values["inBattle"] = false
 	c.ServeJSON()
 
 }
