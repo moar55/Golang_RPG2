@@ -29,8 +29,9 @@ $("#submit").on('click',() => {
 
           }
           else
-          $("#output").text(data.Message);
-    }, failure: function (err) {
+            $("#output").text(data.Message);
+    }, error: function (err) {
+      console.log('error!!');
       $("#output").text(err.message);
     }
   });

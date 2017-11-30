@@ -23,13 +23,13 @@ type LoginController struct {
 }
 
 type SuccessWBot struct {
-	Message string       `json: "message"`
-	Bot     *models.Bots `json: "yourBot"`
+	Message string       `json:"message"`
+	Bot     *models.Bots `json:"yourBot"`
 }
 
 type SuccessWOBot struct {
-	Message  string `json: "message"`
-	BotError string `json: "error"`
+	Message  string `json:"message"`
+	BotError string `json:"message"`
 }
 
 func getBot(c *ChatController, id int, name string, o orm.Ormer) {

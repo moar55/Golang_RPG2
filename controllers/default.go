@@ -20,7 +20,7 @@ type MainController struct {
 //Welcome is a welcoming struct
 type Welcome struct {
 	ServerStatus bool     `json:"serverStatus"`
-	message      string   `json:"message"`
+	Message      string   `json:"message"`
 	Options      []string `json:"options"`
 }
 
