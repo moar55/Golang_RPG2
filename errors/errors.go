@@ -10,7 +10,7 @@ type Error struct {
 }
 
 type ErrorMessage struct {
-	Message string `json:"error"`
+	Message string `json:"message"`
 }
 
 var WrongCredentials = Error{HTTPStatus: 401, Message: ErrorMessage{Message: "Wrong username or password"}}

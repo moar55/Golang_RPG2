@@ -5,10 +5,11 @@ import (
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type myError struct {
-	Message error `json: "message"`
+	Message error `json:"message"`
 }
 
 type RegisterController struct {
@@ -18,9 +19,13 @@ type RegisterController struct {
 func ChatRegister(username string, password string, name string, age int, c *ChatController) {
 
 	o := orm.NewOrm()
+	pass := []byte(password)
+	hashedPassword, _ := bcrypt.GenerateFromPassword(pass, bcrypt.DefaultCost)
+	hashedPass := string(hashedPassword[:])
+	// TODO: handle error lol
 	x := models.Users{
 		Username: username,
-		Password: password,
+		Password: hashedPass,
 		Name:     name,
 		Age:      age,
 	}

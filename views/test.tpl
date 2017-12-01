@@ -23,6 +23,8 @@ $("#submit").on('click',() => {
       contentType:"application/json; charset=utf-8",
       dataType: 'json',
       success: function (data) {
+        $("#output").css("color", "black")
+
           console.info("first",data);
           if(data.message){
             $("#output").text(data.message);
@@ -31,8 +33,9 @@ $("#submit").on('click',() => {
           else
             $("#output").text(data.Message);
     }, error: function (err) {
-      console.log('error!!');
-      $("#output").text(err.message);
+      console.info("error",err);
+      $("#output").css("color", "red")
+      $("#output").text(err.responseJSON.message);
     }
   });
 })
