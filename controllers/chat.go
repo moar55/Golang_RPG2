@@ -16,6 +16,8 @@ type ChatController struct {
 
 type Message struct {
 	Message string `json:"message"`
+	Mode    string `json:"mode"`
+	Type    string `json:"type"`
 }
 
 // var store *redistore.RediStore
@@ -48,7 +50,7 @@ func (c *ChatController) Post() {
 		session.Options.HttpOnly = true
 
 		if err != nil {
-			c.Data["json"] = &Message{Message: err.Error()}
+			c.Data["json"] = &Message{Message: err.Error(), Type: "Error"}
 			c.Ctx.ResponseWriter.WriteHeader(500)
 		}
 
@@ -89,12 +91,12 @@ func (c *ChatController) Post() {
 			}
 			return
 		case "help":
-			c.Data["json"] = &Message{Message: "register username password name age, login username password, scan to find enemies, bot <name> <race> to create bot, showShop to show nearest shop, buyItem <itemname> to buy an item"}
+			c.Data["json"] = &Message{Message: "register username password name age, login username password, scan to find enemies, bot <name> <race> to create bot, showShop to show nearest shop, buyItem <itemname> to buy an item", Type: "Help"}
 			c.ServeJSON()
 			return
 		default:
 			if !loggedIn(session) {
-				c.Data["json"] = &Message{Message: "Please either login or register, use help to get the required comments"}
+				c.Data["json"] = &Message{Message: "Please either login or register, use help to get the required comments", Type: "Error"}
 				c.ServeJSON()
 				return
 			}

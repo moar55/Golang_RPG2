@@ -9,6 +9,7 @@ import (
 type Item struct {
 	Message string       `json:"message"`
 	Item    models.Items `json:"item"`
+	Mode    string       `json:"mode"`
 }
 
 func FoundItem(message string, item models.Items, botId int) *Item {
@@ -18,5 +19,5 @@ func FoundItem(message string, item models.Items, botId int) *Item {
 		ItemId: item.Id,
 	}
 	o.Insert(&newItem)
-	return &Item{Message: message + item.Name, Item: item}
+	return &Item{Message: message + item.Name, Item: item, Mode: "Item"}
 }

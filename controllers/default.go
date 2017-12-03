@@ -3,7 +3,6 @@ package controllers
 import (
 	"fmt"
 
-	"github.com/astaxie/beego/logs"
 	uuid "github.com/satori/go.uuid"
 
 	"github.com/astaxie/beego"
@@ -19,11 +18,12 @@ type MainController struct {
 
 //Welcome is a welcoming struct
 type Welcome struct {
-	ServerStatus bool     `json:"serverStatus"`
+	ServerStatus bool
 	Message      string   `json:"message"`
 	Options      []string `json:"options"`
 }
 
+//Welcome2 does stuff
 type Welcome2 struct {
 	Message string `json:"message"`
 	UUIDVal string `json:"uuid"`
@@ -31,7 +31,9 @@ type Welcome2 struct {
 
 //Get gets
 func (c *MainController) Get() {
-	if c.GetSession("userId") == nil {
+	session, _ := store.Get(c.Ctx.Output.Context.Request, "session")
+
+	if session.Values["userId"] == nil {
 		options := []string{"Yes", "No"}
 		fmt.Println(options)
 		u1 := uuid.NewV4()
@@ -47,9 +49,7 @@ func (c *MainController) Get() {
 
 	} else {
 		options := []string{"Continue"}
-		l := logs.GetLogger()
-		l.Println(c.GetSession("userId"))
-		y := fmt.Sprintf("Welcome, %d", c.GetSession("userId").(int))
+		y := session.Values["userId"].(string)
 		x := Welcome{true, y, options}
 		c.Data["json"] = &x
 	}
