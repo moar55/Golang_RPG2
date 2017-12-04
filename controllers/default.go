@@ -38,15 +38,7 @@ func (c *MainController) Get() {
 		fmt.Println(options)
 		u1 := uuid.NewV4()
 		x := Welcome2{"Welcome adventurer! Did you happen to visit this realm before? If you would like to login please type 'login _ _' and fill the 2 spaces with your username and password otherwise type 'register _ _ _ _' and fill them with username password name age. ", u1.String()}
-		// userID := session.Get("UserID")
-
-		// }
-
 		c.Data["json"] = &x
-		// // TODO:Hey jude don't forget to uncomment
-		// // l := logs.GetLogger()
-		// // l.Println(x.ServerStatus)
-
 	} else {
 		options := []string{"Continue"}
 		y := session.Values["userId"].(string)

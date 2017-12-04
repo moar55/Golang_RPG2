@@ -107,11 +107,22 @@ func (c *ChatController) Post() {
 			switch message[0] {
 			case "bot":
 				ChatBot(message[1], message[2], c)
+			case "items":
+				ChatGetItems(c)
 			case "scan":
 				ChatScan(c)
 			case "attack":
 				if session.Values["inBattle"] == true {
 					ChatAttack(c)
+				} else {
+					c.Data["json"] = &Message{Message: "You aren't in a battle!"}
+					c.Ctx.ResponseWriter.WriteHeader(400)
+					c.ServeJSON()
+				}
+			case "item":
+				if session.Values["inBattle"] == true {
+					m := strings.Split(reqMessage.Message, "'")
+					ChatItem(c, m[1])
 				} else {
 					c.Data["json"] = &Message{Message: "You aren't in a battle!"}
 					c.Ctx.ResponseWriter.WriteHeader(400)
