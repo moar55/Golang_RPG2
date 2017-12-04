@@ -180,8 +180,10 @@ INSERT INTO locations (name, type) VALUES ('Moar''s House', 'type1'); #ID 1
 INSERT INTO locations (name, type) VALUES ('location2', 'type2'); #ID 2
 INSERT INTO locations (name, type) VALUES ('location3', 'type3'); #ID 3
 
-INSERT INTO items (required_level, name, description, race, type, price) VALUES (1, 'Health Potion', 'Restores 15% of your maximum health', '', 1, 100);
-INSERT INTO items (required_level, name, description, race, type, price) VALUES (1, 'axe of awesomeness', 'an axe only engs can use because of how complex it is', 'ENG', 2, 10000);
+INSERT INTO items (required_level, name, description, race, type, price) VALUES (1, 'Kofta Sandwich', 'A budget sandwich that you have a weird love-hate relationship with. Restores 200 health.', '', 1, 100);
+INSERT INTO items (required_level, name, description, race, type, price) VALUES (1, 'Panini Sandwich', 'One of the best sandwiches offered in the GUC, but relatively expensive. Restores 30% of your max helath.', 'ENG', 2, 10000);
+INSERT INTO items (required_level, name, description, race, type, price) VALUES (1, 'Chicken Ranch Sandwich', 'The absolute best sandwich in the GUC, and at a reasonable price! Restores half of your max health.', 'ENG', 2, 10000);
+
 
 INSERT INTO shop_items (location_id, item_id, price) VALUES (1, 1, 5);
 
