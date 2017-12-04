@@ -148,7 +148,7 @@ func (c *ChatController) Post() {
 			case "showShop":
 				ChatShop(c)
 			case "buyItem":
-				name := strings.Split(c.GetString("message"), "'")[1]
+				name := strings.Split(message[1], "'")[1]
 				ChatBuy(c, name)
 			default:
 				c.Data["json"] = &Message{Message: "Incorrect input. Use help to get possible commands", Mode: "Error"}

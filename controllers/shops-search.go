@@ -27,7 +27,7 @@ func ChatSearch(latitude float64, longitude float64, c *ChatController) {
 	r := &maps.NearbySearchRequest{Location: &maps.LatLng{Lat: latitude, Lng: longitude}, RankBy: "distance", Type: "stadium"}
 	resp, err := c2.NearbySearch(context.Background(), r)
 	if err != nil {
-		c.Data["json"] = &errors.InvalidParameters.Message
+		c.Data["json"] = &Response{Message: err.Error(), Mode: "Error"}
 		fmt.Println("the err is ", err)
 		c.Ctx.ResponseWriter.WriteHeader(errors.InvalidParameters.HTTPStatus)
 	} else {

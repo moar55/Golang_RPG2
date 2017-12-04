@@ -142,7 +142,7 @@ create table users
 	id int auto_increment
 		primary key,
 	username varchar(45) not null,
-	password varchar(200) not null,
+	password varchar(45) not null,
 	name varchar(45) not null,
 	age varchar(45) null,
 	constraint username_UNIQUE
