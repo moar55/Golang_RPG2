@@ -34,6 +34,7 @@ func ChatSearch(latitude float64, longitude float64, c *ChatController) {
 		nearestLocation := resp.Results[0]
 		o := orm.NewOrm()
 		location := models.Locations{Name: nearestLocation.Name}
+		fmt.Println("the shop name is ", nearestLocation.Name)
 		err := o.Read(&location, "Name")
 		if err == orm.ErrNoRows {
 			c.Data["json"] = &Response{Message: "No shops available!", Mode: "NoShop"}
