@@ -51,7 +51,7 @@ func ChatBuy(c *ChatController, name string) {
 			} else {
 				bot.Fakka = bot.Fakka - shopItem.Price
 				fmt.Println("Bot fakka: ", bot.Fakka, " Item Price: ", shopItem.Price)
-				_, err = o.Update(&bot, "Fakka")
+				_, err = o.Update(bot, "Fakka")
 				if err != nil {
 					c.Data["json"] = &Response{Message: err.Error()}
 					c.Ctx.ResponseWriter.WriteHeader(500)

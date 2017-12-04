@@ -23,7 +23,7 @@ func ChatScan(c *ChatController) {
 	session, _ := store.Get(c.Ctx.Request, "session")
 	fmt.Println("the session is", session)
 
-	if session.Values["id"] != nil && session.Values["bot"] != nil {
+	if session.Values["bot"] != nil {
 		if session.Values["inBattle"] == false {
 			rand.Seed(time.Now().UTC().UnixNano())
 			random := rand.Intn(100)
@@ -87,7 +87,7 @@ func ChatScan(c *ChatController) {
 			c.Data["json"] = &errors.ErrorMessage{Message: "You're already in a battle!"}
 		}
 	} else {
-		c.Data["json"] = &errors.ErrorMessage{Message: "Please login and/or create a bot"}
+		c.Data["json"] = &errors.ErrorMessage{Message: "Please create a bot"}
 	}
 	session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 
