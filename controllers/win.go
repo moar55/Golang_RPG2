@@ -3,6 +3,8 @@ package controllers
 import (
 	"Golang_RPG/models"
 	"strconv"
+
+	"github.com/astaxie/beego/orm"
 )
 
 type win struct {
@@ -15,7 +17,11 @@ func Win(c *ChatController) {
 	session, _ := store.Get(c.Ctx.Output.Context.Request, "session")
 	enemy := session.Values["enemy"].(*models.Enemies)
 	session.Values["inBattle"] = false
-	c.Data["json"] = &Message{Message: "You won! You gained " + strconv.Itoa(enemy.Fakka) + " Fakka!"}
+	o := orm.NewOrm()
+	bot := session.Values["bot"].(*models.Bots)
+	bot.Fakka = bot.Fakka - enemy.Fakka
+	o.Update(&bot, "Fakka")
+	c.Data["json"] = &Message{Message: "You won! You gained " + strconv.Itoa(enemy.Fakka) + " Fakka!", Mode: "Win"}
 	session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 	c.ServeJSON()
 }

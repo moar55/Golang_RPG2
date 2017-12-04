@@ -28,7 +28,6 @@ func EnemyTurn(c *ChatController, enemy *models.Enemies, player *models.Bots) {
 	playerCurrentHealth =
 		// playerCurrentHealth - (enemy.Power * (100 - (player.Defense / 500)))
 		playerCurrentHealth - formula
-	fmt.Println("Your health ", playerCurrentHealth)
 	if playerCurrentHealth <= 0 {
 		Lose(c)
 	} else {
@@ -37,6 +36,7 @@ func EnemyTurn(c *ChatController, enemy *models.Enemies, player *models.Bots) {
 		c.Data["json"] = &Message{
 			Message: player.Name + ": " + strconv.Itoa(playerCurrentHealth) + " / " + strconv.Itoa(player.Maxhp) +
 				"    " + enemy.Name + ": " + strconv.Itoa(enemyCurrentHealth) + " / " + strconv.Itoa(enemy.Maxhp),
+			Mode: "Turn",
 		}
 		session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 		c.ServeJSON()
@@ -64,6 +64,7 @@ func DEnemyTurn(c *ChatController, enemy *models.Enemies, player *models.Bots) {
 		c.Data["json"] = &Message{
 			Message: player.Name + ": " + strconv.Itoa(playerCurrentHealth) + " / " + strconv.Itoa(player.Maxhp) +
 				"    " + enemy.Name + ": " + strconv.Itoa(enemyCurrentHealth) + " / " + strconv.Itoa(enemy.Maxhp),
+			Mode: "DTurn",
 		}
 		session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 		c.ServeJSON()
