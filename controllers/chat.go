@@ -89,7 +89,7 @@ func (c *ChatController) Post() {
 			if loggedIn(session) {
 				break
 			} else {
-				c.Data["json"] = &Message{Mode: "LocError"}
+				c.Data["json"] = &Message{Message: "Locerr", Mode: "LocError"}
 				c.ServeJSON()
 			}
 		default:
