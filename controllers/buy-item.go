@@ -56,8 +56,17 @@ func ChatBuy(c *ChatController, name string) {
 					c.Data["json"] = &Response{Message: err.Error()}
 					c.Ctx.ResponseWriter.WriteHeader(500)
 				} else {
-					c.Data["json"] = &Response{Message: "Done!"}
-					session.Values["nearShop"] = nil
+					x := models.Inventory{
+						BotId:  bot.Id,
+						ItemId: shopItem.Item.Id}
+					_, err = o.Insert(&x)
+					if err != nil {
+						c.Data["json"] = &Response{Message: err.Error()}
+						c.Ctx.ResponseWriter.WriteHeader(500)
+					} else {
+						c.Data["json"] = &Response{Message: "Done!"}
+						session.Values["nearShop"] = nil
+					}
 				}
 			}
 		}
