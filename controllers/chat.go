@@ -82,7 +82,7 @@ func (c *ChatController) Post() {
 			}
 			return
 		case "help":
-			c.Data["json"] = &Message{Message: "register username password name age, login username password, scan to find enemies, bot <name> <race> to create bot, showShop to show nearest shop, buyItem <itemname> to buy an item", Mode: "Help"}
+			c.Data["json"] = &Message{Message: "register username password name age,\n login username password,\n scan to find enemies,\n bot <name> <race> to create bot,\n showShop to show nearest shop,\n buyItem <itemname> to buy an item, \n ", Mode: "Help"}
 			c.ServeJSON()
 			return
 		case "search":
