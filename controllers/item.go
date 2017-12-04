@@ -115,6 +115,11 @@ func useItem(itemName string, playerHealth int, enemyHealth int, bot *models.Bot
 		break
 	case ("Super Salad"):
 		break
+	case ("Health Potion"):
+		playerHealth += int(float64(bot.Maxhp) * 0.15)
+		if playerHealth > bot.Maxhp {
+			playerHealth = bot.Maxhp
+		}
 	}
 	return playerHealth, enemyHealth, bot, enemy
 }
