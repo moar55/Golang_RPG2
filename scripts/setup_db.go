@@ -26,10 +26,10 @@ func init() {
 		connectionString = beego.AppConfig.String("connectionString")
 	}
 
-	// maxIdle := 0
-	// maxConn := 30
+	maxIdle := 0
+	maxConn := 30
 
-	orm.RegisterDataBase("default", "mysql", connectionString)
+	orm.RegisterDataBase("default", "mysql", connectionString, maxIdle, maxConn)
 	orm.RegisterModel(new(models.Users))
 	orm.RegisterModel(new(models.Bots))
 	orm.RegisterModel(new(models.Inventory))
