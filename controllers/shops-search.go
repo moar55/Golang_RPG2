@@ -53,10 +53,10 @@ func ChatSearch(latitude float64, longitude float64, c *ChatController) {
 				c.Ctx.ResponseWriter.WriteHeader(errors.InvalidParameters.HTTPStatus)
 			} else {
 				var distance int = resp.Rows[0].Elements[0].Distance.Meters
-				if distance <= 200 && distance > 5 {
+				if distance <= 200 && distance > 50 {
 					var message string = fmt.Sprintf("A nearby shop is located at %d meters away, get closer to access it :)", distance)
 					c.Data["json"] = &Response{Message: message}
-				} else if distance <= 5 {
+				} else if distance <= 50 {
 					c.Data["json"] = &Response{Message: "A nearby shop is just beside you. Type access to access it!"}
 					session.Values["nearShop"] = location.Id
 				} else {
