@@ -17,7 +17,7 @@ func ChatBuy(c *ChatController, name string) {
 	session, _ := store.Get(c.Ctx.Output.Context.Request, "session")
 	if session.Values["nearShop"] == nil {
 		fmt.Print(session.Values["nearShop"])
-		c.Data["json"] = &Message{Message: "search again for shop"}
+		c.Data["json"] = &Message{Message: "search again for shop", Mode: "Error"}
 		c.Ctx.ResponseWriter.WriteHeader(403)
 		c.ServeJSON()
 		return

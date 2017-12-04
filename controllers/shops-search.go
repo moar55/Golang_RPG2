@@ -18,6 +18,7 @@ type ShopsSearchController struct {
 
 type Response struct {
 	Message string `json:"message"`
+	Mode    string `json:"mode"`
 }
 
 func ChatSearch(latitude float64, longitude float64, c *ChatController) {
@@ -35,7 +36,7 @@ func ChatSearch(latitude float64, longitude float64, c *ChatController) {
 		location := models.Locations{Name: nearestLocation.Name}
 		err := o.Read(&location, "Name")
 		if err == orm.ErrNoRows {
-			c.Data["json"] = &Response{Message: "No nearby shops"}
+			c.Data["json"] = &Response{Message: "No shops available!", Mode: "NoShop"}
 		} else {
 			var (
 				latitudeOfNearest   string = strconv.FormatFloat(nearestLocation.Geometry.Location.Lat, 'f', -1, 64)
@@ -55,12 +56,12 @@ func ChatSearch(latitude float64, longitude float64, c *ChatController) {
 				var distance int = resp.Rows[0].Elements[0].Distance.Meters
 				if distance <= 200 && distance > 50 {
 					var message string = fmt.Sprintf("A nearby shop is located at %d meters away, get closer to access it :)", distance)
-					c.Data["json"] = &Response{Message: message}
+					c.Data["json"] = &Response{Message: message, Mode: "NearShop"}
 				} else if distance <= 50 {
-					c.Data["json"] = &Response{Message: "A nearby shop is just beside you. Type access to access it!"}
+					c.Data["json"] = &Response{Message: "A nearby shop is just beside you. Type access to access it!", Mode: "Shop"}
 					session.Values["nearShop"] = location.Id
 				} else {
-					c.Data["json"] = &Response{Message: "No nearby shops!"}
+					c.Data["json"] = &Response{Message: "No nearby shops!", Mode: "NoShop"}
 
 				}
 			}

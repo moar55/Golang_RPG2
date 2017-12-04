@@ -25,15 +25,6 @@ type Message struct {
 var store = sessions.NewCookieStore([]byte("something-very-secret"))
 
 func init() {
-	// storetemp, err := redistore.NewRediStore(10, "tcp", "localhost:8000", "", []byte("secret-key"))
-	// // store, err := NewRediStore(10, "tcp", ":6379", "", []byte("secret-key"))
-	//
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// store, _ = mysqlstore.NewMySQLStore("b74fb0aa2d159d:847dba6e@tcp(us-cdbr-iron-east-05.cleardb.net:3306)/heroku_c82a81d5007f2fa?parseTime=true&loc=Local", "sessions", "/", 3600, []byte("supersecretkey"))
-	// store2, _ := mysqlstore.NewMySQLStoreFromConnection(db, "sessions", "/", 86400*7)
-	// fmt.Println(store2)
 }
 
 func loggedIn(session *sessions.Session) bool {
@@ -50,7 +41,7 @@ func (c *ChatController) Post() {
 		session.Options.HttpOnly = true
 
 		if err != nil {
-			c.Data["json"] = &Message{Message: err.Error(), Type: "Error"}
+			c.Data["json"] = &Message{Message: err.Error(), Mode: "Error"}
 			c.Ctx.ResponseWriter.WriteHeader(500)
 		}
 
@@ -61,7 +52,7 @@ func (c *ChatController) Post() {
 		case "login":
 			if loggedIn(session) {
 				c.Ctx.ResponseWriter.WriteHeader(400)
-				c.Data["json"] = &Message{Message: "You are already logged in, please logout first"}
+				c.Data["json"] = &Message{Message: "You are already logged in, please logout first", Mode: "Error"}
 				session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 				c.ServeJSON()
 				return
@@ -69,7 +60,7 @@ func (c *ChatController) Post() {
 			ChatLogin(message[1], message[2], c)
 		case "register":
 			if loggedIn(session) {
-				c.Data["json"] = &Message{Message: "You are already logged in"}
+				c.Data["json"] = &Message{Message: "You are already logged in", Mode: "Error"}
 				c.Ctx.ResponseWriter.WriteHeader(400)
 				session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 				c.ServeJSON()
@@ -79,24 +70,31 @@ func (c *ChatController) Post() {
 			ChatRegister(message[1], message[2], message[3], age, c)
 		case "logout":
 			if !loggedIn(session) {
-				c.Data["json"] = &Message{Message: "You aren't logged ins"}
+				c.Data["json"] = &Message{Message: "You aren't logged ins", Mode: "Error"}
 				c.Ctx.ResponseWriter.WriteHeader(400)
 				session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 				c.ServeJSON()
 			} else {
 				session.Values["id"] = nil
-				c.Data["json"] = &Message{Message: "Logged out"}
+				c.Data["json"] = &Message{Message: "Logged out", Mode: "Error"}
 				session.Save(c.Ctx.Request, c.Ctx.ResponseWriter)
 				c.ServeJSON()
 			}
 			return
 		case "help":
-			c.Data["json"] = &Message{Message: "register username password name age, login username password, scan to find enemies, bot <name> <race> to create bot, showShop to show nearest shop, buyItem <itemname> to buy an item", Type: "Help"}
+			c.Data["json"] = &Message{Message: "register username password name age, login username password, scan to find enemies, bot <name> <race> to create bot, showShop to show nearest shop, buyItem <itemname> to buy an item", Mode: "Help"}
 			c.ServeJSON()
 			return
+		case "search":
+			if loggedIn(session) {
+				break
+			} else {
+				c.Data["json"] = &Message{Mode: "LocError"}
+				c.ServeJSON()
+			}
 		default:
 			if !loggedIn(session) {
-				c.Data["json"] = &Message{Message: "Please either login or register, use help to get the required comments", Type: "Error"}
+				c.Data["json"] = &Message{Message: "Please either login or register, use help to get the required comments", Mode: "Error"}
 				c.ServeJSON()
 				return
 			}
@@ -115,7 +113,7 @@ func (c *ChatController) Post() {
 				if session.Values["inBattle"] == true {
 					ChatAttack(c)
 				} else {
-					c.Data["json"] = &Message{Message: "You aren't in a battle!"}
+					c.Data["json"] = &Message{Message: "You aren't in a battle!", Mode: "Error"}
 					c.Ctx.ResponseWriter.WriteHeader(400)
 					c.ServeJSON()
 				}
@@ -124,7 +122,7 @@ func (c *ChatController) Post() {
 					m := strings.Split(reqMessage.Message, "'")
 					ChatItem(c, m[1])
 				} else {
-					c.Data["json"] = &Message{Message: "You aren't in a battle!"}
+					c.Data["json"] = &Message{Message: "You aren't in a battle!", Mode: "Error"}
 					c.Ctx.ResponseWriter.WriteHeader(400)
 					c.ServeJSON()
 				}
@@ -132,13 +130,13 @@ func (c *ChatController) Post() {
 				if session.Values["inBattle"] == true {
 					ChatDefend(c)
 				} else {
-					c.Data["json"] = &Message{Message: "You aren't in a battle!"}
+					c.Data["json"] = &Message{Message: "You aren't in a battle!", Mode: "Error"}
 					c.Ctx.ResponseWriter.WriteHeader(400)
 					c.ServeJSON()
 				}
 			case "search":
 				if session.Values["inBattle"] == true {
-					c.Data["json"] = &Message{Message: "You can't search in a battle!"}
+					c.Data["json"] = &Message{Message: "You can't search in a battle!", Mode: "Error"}
 					c.Ctx.ResponseWriter.WriteHeader(400)
 					c.ServeJSON()
 					return
@@ -153,12 +151,12 @@ func (c *ChatController) Post() {
 				name := strings.Split(c.GetString("message"), "'")[1]
 				ChatBuy(c, name)
 			default:
-				c.Data["json"] = &Message{Message: "Incorrect input. Use help to get possible commands"}
+				c.Data["json"] = &Message{Message: "Incorrect input. Use help to get possible commands", Mode: "Error"}
 				c.ServeJSON()
 			}
 		}
 	} else {
-		c.Data["json"] = &Message{Message: "Forbidden action: You have no uuid"}
+		c.Data["json"] = &Message{Message: "Forbidden action: You have no uuid", Mode: "Error"}
 		c.Ctx.ResponseWriter.WriteHeader(403)
 		c.ServeJSON()
 	}

@@ -41,7 +41,7 @@ func ChatBot(name string, race string, c *ChatController) {
 				c.Data["json"] = &errors.Err{Message: err}
 				c.Ctx.ResponseWriter.WriteHeader(401)
 			} else {
-				c.Data["json"] = &Message{Message: "Congratulations! You just created your bot, " + bot.Name, Type: "Bot"}
+				c.Data["json"] = &Message{Message: "Congratulations! You just created your bot, " + bot.Name, Mode: "Bot"}
 			}
 		} else {
 			c.Data["json"] = &errors.HaveBot.Message

@@ -72,7 +72,7 @@ func ChatLogin(username string, password string, c *ChatController) {
 			session.Options.HttpOnly = true
 			user.Password = ""
 			if err != nil {
-				c.Data["json"] = &Message{Message: err.Error()}
+				c.Data["json"] = &Message{Message: err.Error(), Mode: "Error"}
 				c.Ctx.ResponseWriter.WriteHeader(500)
 			}
 			session.Values["id"] = user.Id
