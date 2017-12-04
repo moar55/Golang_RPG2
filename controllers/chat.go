@@ -136,7 +136,7 @@ func (c *ChatController) Post() {
 				}
 			case "search":
 				if session.Values["inBattle"] == true {
-					c.Data["json"] = &Message{Message: "You can't search in a battle!", Mode: "Error"}
+					c.Data["json"] = &Message{Message: "You can't search in a battle!", Mode: "LocError"}
 					c.Ctx.ResponseWriter.WriteHeader(400)
 					c.ServeJSON()
 					return
