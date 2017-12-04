@@ -19,8 +19,6 @@ type duo struct {
 	Quantity    int
 }
 
-type 
-
 func ChatGetItems(c *ChatController) {
 	session, _ := store.Get(c.Ctx.Output.Context.Request, "session")
 	o := orm.NewOrm()
